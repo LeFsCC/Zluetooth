@@ -46,13 +46,9 @@ public class MatchedFilter {
         this.modulated = modulated;
 
         this.recovered_signal = new ArrayList<Double>();
-
-
         getSync();
         matchSignal();
         recoverSignal();
-
-
     }
 
     public void getSync() {
