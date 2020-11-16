@@ -24,14 +24,10 @@ public class AudioHandler {
     private ArrayList<Double> modulated;
     private ArrayList<Double> recordedData;
     private long n;
-
-//    private static  AudioRecord record;
-//    private static  boolean is_recording;
-
     private static Context context;
 
     public AudioHandler(Context context, String filename) {
-        this.context = context;
+        AudioHandler.context = context;
         this.filename = filename;
 
         try {
@@ -55,7 +51,7 @@ public class AudioHandler {
         this.n_frames = (long) (duration * sample_rate);
         this.filename = filename;
 
-        this.context = context;
+        AudioHandler.context = context;
 
         data = new double[src.length];
         for (int i = 0; i < src.length; i++) {
@@ -170,7 +166,7 @@ public class AudioHandler {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             // if storage is mounted return true
-            Log.d("RedTooth", "Yes, can write to external storage.");
+            Log.d("Zluetooth", "Yes, can write to external storage.");
             return true;
         }
         return false;

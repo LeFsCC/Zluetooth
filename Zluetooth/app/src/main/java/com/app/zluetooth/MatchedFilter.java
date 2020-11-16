@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-/**
- * Created by misha on 2016/09/23.
- */
 public class MatchedFilter {
 
     private double duration;
@@ -77,18 +74,12 @@ public class MatchedFilter {
             System.arraycopy(toArray(modulated), 0, signal_fft, 0, modulated.size());
             fft.realForwardFull(signal_fft);
 
-            //Working.
-
 
             chirp_fft = new double[modulated.size() * 2];
             System.arraycopy(chirp_signal_a, 0, chirp_fft, 0, chirp_signal_a.length);
 
             fft.realForwardFull(chirp_fft);
             System.out.println("Frequency Domain Transforms complete");
-
-
-//            System.out.println("This is the size of signal_fft:" + signal_fft.length);
-//            System.out.println("This is the size of chirp_fft:" + chirp_fft.length);
 
             filter_out = new double[signal_fft.length];
             for (int i = 0; i < signal_fft.length; i++) {
@@ -197,6 +188,4 @@ public class MatchedFilter {
 
         return r;
     }
-
-
 }

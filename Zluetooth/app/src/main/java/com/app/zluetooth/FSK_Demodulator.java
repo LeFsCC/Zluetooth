@@ -5,9 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 
 
-/**
- * Created by misha on 2016/09/12.
- */
 public class FSK_Demodulator {
 
 
@@ -77,16 +74,11 @@ public class FSK_Demodulator {
 
 
                 double max = Collections.max(holder);
-
-//                if (same(holder) == false) {
-
                 for (int n = 0; n < holder.size(); n++) {
                     if (max == holder.get(n)) {
                         demodulated.addAll(getBits(n));
                     }
                 }
-//                }
-
                 holder.clear();
             }
 
@@ -230,17 +222,4 @@ public class FSK_Demodulator {
     public ArrayList<Integer> getDemodulated() {
         return demodulated;
     }
-
-//    public boolean same(ArrayList<Double> data) {
-//        boolean s = true;
-//        double check = data.get(0);
-//        for (int i = 1; i < data.size(); i++) {
-//            if (check != data.get(i)) {
-//                return false;
-//            }
-//
-//        }
-//
-//        return s;
-//    }
 }

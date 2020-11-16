@@ -4,9 +4,6 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
-/**
- * Created by misha on 2016/09/12.
- */
 public class Receiver {
 
     private String file_name;
@@ -74,10 +71,6 @@ public class Receiver {
             audio_handler.close();
 
             fsk_demodulator = new FSK_Demodulator(sample_rate, symbol_size, recoverd_signal);
-
-//            System.out.println("Writing Data File:");
-//            writeData();
-//            System.out.println("Data File Written");
 
         } catch (Exception e) {
             e.printStackTrace();

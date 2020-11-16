@@ -57,18 +57,14 @@ public class SignalGenerator {
         try {
             data = new ArrayList<Double>();
             double rad = 0;
-//        System.out.println("Starting Generation for carrier with freuqnecy: " + f);
             for (int i = 0; i < symbol_size / step_size; i++) {
                 rad = (2 * Math.PI * f * i * step_size);
                 data.add(Math.cos(rad));
-//            System.out.println("Value of cos at " + i + " is " +data.get(i));
             }
-//        System.out.println("Data generated for Carrier at : " + f);
-        }catch(Exception e){
+        } catch(Exception e){
             e.printStackTrace();
         }
         return data;
-
     }
 
 
@@ -77,17 +73,11 @@ public class SignalGenerator {
         sync = new ArrayList<Double>();
         double rad = 0;
         double k = ((16000 - 6000) / symbol_size);
-
-//        System.out.println("Starting Generation for carrier with freuqnecy: " + f);
         for (int i = 0; i < symbol_size * sample_rate; i++) {
 
             rad = (2 * Math.PI * ((k / 2) * i * step_size + 6000) * i * step_size);
             sync.add(Math.cos(rad));
-//            System.out.println("Value of cos at " + i + " is " +data.get(i));
         }
-//        System.out.println("Data generated for Carrier at : " + f);
         return sync;
-
     }
-
 }

@@ -3,9 +3,6 @@ package com.app.zluetooth;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Created by misha on 2016/09/12.
- */
 public class FSK_Modulator {
 
     private static int[] data;
@@ -45,7 +42,7 @@ public class FSK_Modulator {
         this.sample_rate = sample_rate;
         this.symbol_size = symbol_size;
         this.sample_period = 1 / sample_rate;
-        this.number_of_carriers = 16;                //Make this ` for now.
+        this.number_of_carriers = 16;
         this.fs = 6000;
         initFrequencies();
         initCarriers();
@@ -57,11 +54,9 @@ public class FSK_Modulator {
     public void initFrequencies() {
         frequencies = new int[number_of_carriers];
         frequencies[0] = fs;
-//        System.out.println("This is frequency: " + frequencies[0]);
         for (int i = 1; i < number_of_carriers; i++) {
 
             frequencies[i] = frequencies[i -1] + 625;
-//            System.out.println("This is frequency: " + frequencies[i]);
         }
 
     }
@@ -79,19 +74,14 @@ public class FSK_Modulator {
 
 
         int temp[] = new int[4];
-
-
         modulated = new ArrayList<Double>();
-        modulated.addAll(carriers.get(0).generate_sync()); //Adding the synchronization signal.
+        modulated.addAll(carriers.get(0).generate_sync());
         System.out.println("Starting Modulation Generation");
         for (int i = 0; i < data.length - 3; i += 4) {
             temp[0] = data[i];
             temp[1] = data[i + 1];
             temp[2] = data[i + 2];
             temp[3] = data[i + 3];
-
-//            Log.d("RedTooth", "Running number: " + i );
-
             map(temp);
 
         }

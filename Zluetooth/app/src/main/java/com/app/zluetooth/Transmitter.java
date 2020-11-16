@@ -1,13 +1,9 @@
 package com.app.zluetooth;
 
 import android.content.Context;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 
-/**
- * Created by misha on 2016/09/12.
- */
 public class Transmitter {
 
     private static String modulation;

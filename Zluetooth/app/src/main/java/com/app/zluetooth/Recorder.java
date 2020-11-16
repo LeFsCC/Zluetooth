@@ -14,9 +14,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-/**
- * NOOOOOOOOOOOT!!!! Created by misha on 2016/09/17.
- */
 public class Recorder {
 
     //Begin private fields for this class
@@ -39,7 +36,7 @@ public class Recorder {
 
     //Constructor
     public Recorder(String uniquename) {
-        //Initilize our recorder object
+
         /*recorder = new AudioRecord(
                 MediaRecorder.AudioSource.MIC,
                 44100,
