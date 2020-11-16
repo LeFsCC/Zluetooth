@@ -1,7 +1,7 @@
 package com.app.zluetooth;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.core.content.ContextCompat;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
