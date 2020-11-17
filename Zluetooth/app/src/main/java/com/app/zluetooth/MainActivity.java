@@ -3,6 +3,7 @@ package com.app.zluetooth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -63,5 +64,21 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "permission granted ");
             }
         }
+    }
+
+    public void initReceive() {
+
+    }
+
+    public void initTransmit() {
+
+    }
+
+    public void generate() {
+
+    }
+
+    public void record() {
+
     }
 }
