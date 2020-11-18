@@ -11,7 +11,7 @@ public class FSK_Modulator {
     private static double sample_period;
     private static int number_of_carriers;
     private static int[] frequencies;
-    private static int fs;                    //Start Frequency
+    private static int fs;                    //开始频率
     private static ArrayList<Double> modulated;
     private static ArrayList<SignalGenerator> carriers;
 
@@ -51,6 +51,7 @@ public class FSK_Modulator {
     public FSK_Modulator() {
     }
 
+//    16种不同频率
     public void initFrequencies() {
         frequencies = new int[number_of_carriers];
         frequencies[0] = fs;
@@ -67,6 +68,7 @@ public class FSK_Modulator {
             SignalGenerator s = new SignalGenerator(symbol_size, frequencies[i], 1.0 / 44100.0);
             carriers.add(s);
             System.out.println("Carrier : " + i + " Initialized");
+            //通过这个generate类每个代表一个频率，有16个生成器，对应生成不同数据
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
+// 信号发送器
 public class Transmitter {
 
     private static String modulation;
@@ -17,7 +18,7 @@ public class Transmitter {
 
     private static FSK_Modulator               fsk_modulator;
     private static AudioHandler                audio_handler;
-    private static StringHanlder               string_handler;
+    private static StringHanlder               string_handler;//获得二进制序列
 
     private static Context context;
 
@@ -25,10 +26,12 @@ public class Transmitter {
 
     }
 
-    public Transmitter(String modulation, String src, double sample_rate, double symbol_size, double sample_period, int number_of_carriers, Context context) {//Constructore for String
+    public Transmitter(String modulation, String src, double sample_rate, double symbol_size,
+                       double sample_period, int number_of_carriers, Context context) {
+        //Constructore for String
         Transmitter.modulation = modulation;
-        Transmitter.src = src;
-        Transmitter.sample_rate = sample_rate;
+        Transmitter.src = src;//字符串序列
+        Transmitter.sample_rate = sample_rate;//采样率
         Transmitter.symbol_size = symbol_size;
         Transmitter.sample_period = sample_period;
         Transmitter.number_of_carriers = number_of_carriers;
@@ -46,6 +49,7 @@ public class Transmitter {
     }
 
 
+//    初始化二进制序列
     public void initString(){
         string_handler = new StringHanlder(src);
         System.out.println("This is the length of Data : " + string_handler.getB().length);
@@ -54,6 +58,7 @@ public class Transmitter {
 
     }
 
+//    使用FSK调制
     public void initModulator (){
         if (modulation.equals("FSK")) {
             fsk_modulator = new FSK_Modulator(data, sample_rate, symbol_size, number_of_carriers);
