@@ -114,10 +114,10 @@ public class MatchedFilter {
             System.out.println("Finding Max index");
             start_index = maxIndex(filter_out, max) +(int) (symbol_size*sample_rate);
             System.out.println("Offset is: " + (int) (symbol_size*sample_rate));
+            System.out.println("!!!!!!!!!!!!!!max is: " + (int) (start_index));
 
 
-
-            for (int n = start_index; n < start_index + 441000; n++) {
+            for (int n = start_index; n < start_index + 441000 && n<modulated.size(); n++) {
                 recovered_signal.add(modulated.get(n));
 
             }

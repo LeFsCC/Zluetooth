@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sample_rate = 44100.0;
         symbol_size = 0.5;
         sample_period = 1.0 / sample_rate;
-        duration = 50;     //duration = src.length * 16 * symbol_size / 7
+        duration = 12;     //duration = src.length * 16 * symbol_size / 7
         number_of_carriers = 16;
 
         Permissions.requestWritePermissions(this, MainActivity.this);
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "别点我", Toast.LENGTH_SHORT).show();
                 final Context context = getApplicationContext();
                 src = mEdit.getText().toString();
-                while (src.length() <= 5) {
+                while (src.length() < 5) {
                     src += " ";
                 }
                 generate();
