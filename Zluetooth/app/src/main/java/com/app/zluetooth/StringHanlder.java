@@ -38,7 +38,9 @@ public class StringHanlder {
         String result = "";
         String tmpStr;
         int tmpInt;
+        System.out.println("This is String temp: " + src);
         char[] messChar = src.toCharArray();//转为char序列
+        System.out.println("This is messChar: " + messChar);
 
         for (int i = 0; i < messChar.length; i++) {
             tmpStr = Integer.toBinaryString(messChar[i]);//遍历每一个char，得到二进制串

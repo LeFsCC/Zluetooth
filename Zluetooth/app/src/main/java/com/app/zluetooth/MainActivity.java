@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sample_rate = 44100.0;
         symbol_size = 0.5;
         sample_period = 1.0 / sample_rate;
-        duration = 12;     //duration = src.length * 16 * symbol_size / 7
+        duration = 50;     //duration = src.length * 16 * symbol_size / 7
         number_of_carriers = 16;
 
         Permissions.requestWritePermissions(this, MainActivity.this);
