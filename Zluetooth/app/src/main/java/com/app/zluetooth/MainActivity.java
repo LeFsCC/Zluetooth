@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,7 +19,7 @@ import com.app.zluetooth.Permissions;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Transmitter transmitter;
     private Receiver receiver;
@@ -33,10 +34,14 @@ public class MainActivity extends AppCompatActivity {
 
     private String recovered_string;
     private EditText mEdit;
-    private Button generate;
+    private Button decode_btn;
+    private Button transmit_btn;
+    private Button receive_btn;
+    private Button encode_btn;
     private TextView recovered_textView;
     private static String TAG = "Permission";
     private static final int REQUEST_WRITE_STORAGE = 112;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,16 @@ public class MainActivity extends AppCompatActivity {
 
         Permissions.requestWritePermissions(this, MainActivity.this);
         Permissions.requestRecordPermissions(this, MainActivity.this);
+        decode_btn = findViewById(R.id.decode_btn);
+        transmit_btn = findViewById(R.id.transmit_btn);
+        receive_btn = findViewById(R.id.receive_btn);
+        encode_btn = findViewById(R.id.encode_btn);
+        decode_btn.setOnClickListener(this);
+        transmit_btn.setOnClickListener(this);
+        receive_btn.setOnClickListener(this);
+        encode_btn.setOnClickListener(this);
+
+        mEdit = findViewById(R.id.raw_data_txt);
     }
 
     @Override
@@ -80,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     public void initTransmit() {
         mediaplayer = new MediaPlayer();
         String root = Environment.getExternalStorageDirectory().toString();
-        File dir = new File(root, "RedTooth");
+        File dir = new File(root, "0ZlueTooth");
         if (!dir.exists()) {
             dir.mkdir();
         }
@@ -112,5 +127,34 @@ public class MainActivity extends AppCompatActivity {
         long endTime = System.nanoTime();
         long duration = (endTime - startTime) / 1000000;
         System.out.println("Time taken for Reception: " + duration + "ms");
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.receive_btn: {
+                initReceive();
+                break;
+            }
+            case R.id.decode_btn:{
+                break;
+            }
+            case R.id.transmit_btn:{
+                initTransmit();
+                break;
+            }
+            case R.id.encode_btn:{
+                Toast.makeText(this, "别点我", Toast.LENGTH_SHORT).show();
+                final Context context = getApplicationContext();
+                src = mEdit.getText().toString();
+                while (src.length() <= 5) {
+                    src += " ";
+                }
+                generate();
+                break;
+            }
+
+
+        }
     }
 }

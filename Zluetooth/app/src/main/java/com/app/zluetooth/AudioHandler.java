@@ -69,13 +69,15 @@ public class AudioHandler {
             if (canWriteOnExternalStorage()) {
 
                 String root = Environment.getExternalStorageDirectory().toString();
-                File folder = new File(root, "RedTooth");
+                File folder = new File(root, "0ZlueTooth");
                 if (!folder.exists()) {
-                    folder.mkdir();
+                    folder.mkdirs();
                 }
+                Log.e("文件路径",folder.getAbsolutePath());
+                Log.e("文件是否存在", String.valueOf(folder.exists()));
                 n_frames = data.length;
 
-                this.wavfile = WavFile.newWavFile(new File(root, "RedTooth/" + filename), 1, n_frames, 16, (long) sample_rate);
+                this.wavfile = WavFile.newWavFile(new File(root, "0ZlueTooth/" + filename), 1, n_frames, 16, (long) sample_rate);
                 System.out.println("Wav File Written!");
                 wavfile.display();
 
