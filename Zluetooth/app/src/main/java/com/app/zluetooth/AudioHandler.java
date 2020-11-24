@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * <p/>
  * Created by misha on 2016/09/13.
  */
+//音频处理类
 public class AudioHandler {
 
     private double sample_rate;
@@ -25,7 +26,7 @@ public class AudioHandler {
     private ArrayList<Double> recordedData;
     private long n;
     private static Context context;
-
+// 初始化获得当前场景，文件名
     public AudioHandler(Context context, String filename) {
         AudioHandler.context = context;
         this.filename = filename;

@@ -10,11 +10,11 @@ import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
+//  获得各种权限
 public class Permissions {
     private static String TAG = "Permission";
     private static final int REQUEST_WRITE_STORAGE = 112;
-
+//  记录权限/录音
     public static void requestRecordPermissions(final Context context, final Activity activity) {
         int permission = ContextCompat.checkSelfPermission(context,
                 Manifest.permission.RECORD_AUDIO);
@@ -50,7 +50,7 @@ public class Permissions {
                 new String[]{Manifest.permission.RECORD_AUDIO},
                 REQUEST_WRITE_STORAGE);
     }
-
+//  存储权限
     public static void requestWritePermissions(final Context context, final Activity activity) {
         int permission = ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);

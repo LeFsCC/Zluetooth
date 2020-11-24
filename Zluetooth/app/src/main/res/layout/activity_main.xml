@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/Logo"
+            android:src="@drawable/logo"
             tools:ignore="MissingConstraints">
 
         </ImageView>
