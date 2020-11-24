@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,12 +16,14 @@ import android.widget.Toast;
 
 import com.app.zluetooth.Permissions;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
 
     private Transmitter transmitter;
     private Receiver receiver;
     private String modulation;
-    private String srcData;
+    private String src;
     private double duration;
     private double sample_rate;
     private double symbol_size;
@@ -67,18 +70,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initReceive() {
-
+        try {
+            record();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void initTransmit() {
+        mediaplayer = new MediaPlayer();
+        String root = Environment.getExternalStorageDirectory().toString();
+        File dir = new File(root, "RedTooth");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
 
+        try {
+            mediaplayer.setDataSource(dir + File.separator + "FSK.wav");
+            mediaplayer.prepare();
+            mediaplayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void generate() {
-
+        transmitter = new Transmitter(modulation, src, sample_rate, symbol_size, sample_period, number_of_carriers, getApplicationContext());
+        System.out.println("Writing WavFile");
+        transmitter.writeAudio();
+        System.out.println("WaveFile Written. Thread waiting");
     }
 
     public void record() {
+        long startTime = System.nanoTime();
 
+        receiver = new Receiver("recorded.wav", sample_rate, symbol_size, duration, number_of_carriers, getApplicationContext());
+        receiver.record();
+        receiver.demodulate();
+        recovered_string = "aaaa";
+        recovered_string = receiver.getRecoverd_string();
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime) / 1000000;
+        System.out.println("Time taken for Reception: " + duration + "ms");
     }
 }
