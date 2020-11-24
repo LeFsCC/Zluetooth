@@ -34,7 +34,7 @@ public class AudioHandler {
         try {
 
             String root = Environment.getExternalStorageDirectory().toString();
-            this.wavfile = WavFile.openWavFile(new File(root, "RedTooth/" + filename));
+            this.wavfile = WavFile.openWavFile(new File(root, "0ZlueTooth/" + filename));
             wavfile.display();
 
 
@@ -160,7 +160,7 @@ public class AudioHandler {
             wavfile.close();
 
         } catch (Exception e) {
-            Log.d("RedTooth", e.toString());
+            Log.d("0ZlueTooth", e.toString());
         }
     }
 

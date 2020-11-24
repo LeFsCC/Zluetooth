@@ -21,7 +21,7 @@ public class Recorder {
 
     private static final int RECORDER_BPP = 16;
     private static final String AUDIO_RECORDER_FILE_EXT_WAV = "recorded.wav";
-    private static final String AUDIO_RECORDER_FOLDER = "RedTooth";
+    private static final String AUDIO_RECORDER_FOLDER = "0ZlueTooth";
     private static final String AUDIO_RECORDER_TEMP_FILE = "recorded.raw";
     private static final int RECORDER_SAMPLERATE = 44100;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
