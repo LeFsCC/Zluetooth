@@ -1,6 +1,11 @@
-package com.app.zluetooth;
+package com.app.zluetooth.FSK;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.app.zluetooth.Utils.AudioHandler;
+import com.app.zluetooth.Utils.Recorder;
+import com.app.zluetooth.Utils.StringHanlder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +23,7 @@ public class Receiver {
     private ArrayList<Integer> demodulated;
 
 
-    private FSK_Demodulator fsk_demodulator;
+    private Demodulator fsk_demodulator;
     private AudioHandler audio_handler;
     private StringHanlder string_handler;
     private MatchedFilter matched_filter;
@@ -40,19 +45,6 @@ public class Receiver {
         this.context = context;
     }
 
-    public void record() {
-        try {
-            r = new Recorder("TEST");
-            r.start();
-            Thread.sleep((long) duration * 1000);
-            r.stop();
-            audio_handler = new AudioHandler(context, file_name);
-            modulated = audio_handler.read();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void record_start() {
         try {
             r = new Recorder("TEST");
@@ -65,6 +57,8 @@ public class Receiver {
     public void record_stop() {
         try {
             r.stop();
+            double avg_vol = r.getVolume();
+            Log.e("该段录音平均音量大小：", String.valueOf(avg_vol));
             audio_handler = new AudioHandler(context, file_name);
             modulated = audio_handler.read();
         } catch (Exception e) {
@@ -126,7 +120,7 @@ public class Receiver {
         System.out.println("----------------------------------------------------------------");
 
         recoverd_signal.addAll(modulated.subList(start_index, modulated.size()));
-        fsk_demodulator = new FSK_Demodulator(sample_rate, symbol_size, recoverd_signal);
+        fsk_demodulator = new Demodulator(sample_rate, symbol_size, recoverd_signal);
         String res = demodulate();
         System.out.println(res);
         fsk_demodulator = null;

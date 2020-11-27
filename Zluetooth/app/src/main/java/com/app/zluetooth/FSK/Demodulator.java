@@ -1,11 +1,14 @@
-package com.app.zluetooth;
+package com.app.zluetooth.FSK;
+
+import com.app.zluetooth.Exception.ZlueToothException;
+import com.app.zluetooth.Utils.RigidData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 
-public class FSK_Demodulator {
+public class Demodulator {
 
 
     private double sample_rate;
@@ -19,7 +22,7 @@ public class FSK_Demodulator {
     private ArrayList<Double> modulated;
 
 
-    public FSK_Demodulator(double sample_rate, double symbol_size, ArrayList<Double> modulated) {
+    public Demodulator(double sample_rate, double symbol_size, ArrayList<Double> modulated) {
         this.sample_rate = sample_rate;
         this.symbol_size = symbol_size;
         this.sample_period = 1 / sample_rate;
@@ -66,7 +69,7 @@ public class FSK_Demodulator {
                         if(RigidData.number_of_carriers == 8) {
                             demodulated.addAll(getBits8(n));
                         } else {
-                            demodulated.addAll(getBits16(n));
+                            throw new ZlueToothException("");
                         }
                     }
                 }
@@ -121,98 +124,7 @@ public class FSK_Demodulator {
         return bits;
     }
 
-    public ArrayList<Integer> getBits16(int n) {
-        ArrayList<Integer> bits = new ArrayList<Integer>();
-        if (n == 0) {
-            bits.add(0);
-            bits.add(0);
-            bits.add(0);
-            bits.add(0);
 
-        } else if (n == 1) {
-            bits.add(0);
-            bits.add(0);
-            bits.add(0);
-            bits.add(1);
-        } else if (n == 2) {
-            bits.add(0);
-            bits.add(0);
-            bits.add(1);
-            bits.add(0);
-        } else if (n == 3) {
-            bits.add(0);
-            bits.add(0);
-            bits.add(1);
-            bits.add(1);
-        } else if (n == 4) {
-            bits.add(0);
-            bits.add(1);
-            bits.add(0);
-            bits.add(0);
-        } else if (n == 5) {
-            bits.add(0);
-            bits.add(1);
-            bits.add(0);
-            bits.add(1);
-        } else if (n == 6) {
-            bits.add(0);
-            bits.add(1);
-            bits.add(1);
-            bits.add(0);
-        } else if (n == 7) {
-            bits.add(0);
-            bits.add(1);
-            bits.add(1);
-            bits.add(1);
-        } else if (n == 8) {
-            bits.add(1);
-            bits.add(0);
-            bits.add(0);
-            bits.add(0);
-        } else if (n == 9) {
-            bits.add(1);
-            bits.add(0);
-            bits.add(0);
-            bits.add(1);
-        } else if (n == 10) {
-            bits.add(1);
-            bits.add(0);
-            bits.add(1);
-            bits.add(0);
-        } else if (n == 11) {
-            bits.add(1);
-            bits.add(0);
-            bits.add(1);
-            bits.add(1);
-        } else if (n == 12) {
-            bits.add(1);
-            bits.add(1);
-            bits.add(0);
-            bits.add(0);
-        } else if (n == 13) {
-            bits.add(1);
-            bits.add(1);
-            bits.add(0);
-            bits.add(1);
-        } else if (n == 14) {
-            bits.add(1);
-            bits.add(1);
-            bits.add(1);
-            bits.add(0);
-        } else if (n == 15) {
-            bits.add(1);
-            bits.add(1);
-            bits.add(1);
-            bits.add(1);
-        } else {
-            try {
-                throw new Exception("NOT A VALID NUMBER");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return bits;
-    }
 
     public double trapz(ArrayList<Double> Carrier, double[] Symbol) {
         double r = 0;

@@ -1,6 +1,8 @@
-package com.app.zluetooth;
+package com.app.zluetooth.Utils;
 
 // Wav file IO class
+
+import com.app.zluetooth.Exception.WavFileException;
 
 import java.io.File;
 import java.io.FileInputStream;

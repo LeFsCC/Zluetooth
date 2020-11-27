@@ -1,4 +1,4 @@
-package com.app.zluetooth;
+package com.app.zluetooth.Utils;
 
 public class DataPacket {
     int raw_length;

@@ -15,7 +15,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.zluetooth.Permissions;
+import com.app.zluetooth.FSK.Receiver;
+import com.app.zluetooth.FSK.Transmitter;
+import com.app.zluetooth.Utils.Permissions;
+import com.app.zluetooth.Utils.RigidData;
 
 import java.io.File;
 

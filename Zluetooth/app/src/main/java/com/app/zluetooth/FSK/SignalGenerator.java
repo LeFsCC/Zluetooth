@@ -1,4 +1,6 @@
-package com.app.zluetooth;
+package com.app.zluetooth.FSK;
+
+import com.app.zluetooth.Utils.RigidData;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,9 @@
-package com.app.zluetooth;
+package com.app.zluetooth.FSK;
 
 import android.content.Context;
+
+import com.app.zluetooth.Utils.AudioHandler;
+import com.app.zluetooth.Utils.StringHanlder;
 
 import java.util.ArrayList;
 
@@ -16,9 +19,9 @@ public class Transmitter {
     private static int                         number_of_carriers;
     private static ArrayList<Double> modulated;
 
-    private static FSK_Modulator               fsk_modulator;
-    private static AudioHandler                audio_handler;
-    private static StringHanlder               string_handler;//获得二进制序列
+    private static Modulator fsk_modulator;
+    private static AudioHandler audio_handler;
+    private static StringHanlder string_handler;//获得二进制序列
 
     private static Context context;
 
@@ -58,7 +61,7 @@ public class Transmitter {
 
     public void initModulator (){
         if (modulation.equals("FSK")) {
-            fsk_modulator = new FSK_Modulator(data, sample_rate, symbol_size, number_of_carriers);
+            fsk_modulator = new Modulator(data, sample_rate, symbol_size, number_of_carriers);
             fsk_modulator.modulate();
             modulated = fsk_modulator.getModulated();
         }

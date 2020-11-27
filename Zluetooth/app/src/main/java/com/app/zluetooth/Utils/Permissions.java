@@ -1,4 +1,4 @@
-package com.app.zluetooth;
+package com.app.zluetooth.Utils;
 
 import android.Manifest;
 import android.app.Activity;

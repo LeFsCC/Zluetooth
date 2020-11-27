@@ -1,9 +1,11 @@
-package com.app.zluetooth;
+package com.app.zluetooth.FSK;
+
+import com.app.zluetooth.Utils.RigidData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FSK_Modulator {
+public class Modulator {
 
     private static int[] data;
     private static double sample_rate;
@@ -42,7 +44,7 @@ public class FSK_Modulator {
     int t_7[] = {1, 1, 1};
 
 
-    public FSK_Modulator(int[] data, double sample_rate, double symbol_size, int number_of_carriers) {
+    public Modulator(int[] data, double sample_rate, double symbol_size, int number_of_carriers) {
         this.data = data;
         this.sample_rate = sample_rate;
         this.symbol_size = symbol_size;
