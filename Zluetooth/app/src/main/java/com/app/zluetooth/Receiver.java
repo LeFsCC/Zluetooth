@@ -129,6 +129,9 @@ public class Receiver {
         fsk_demodulator = new FSK_Demodulator(sample_rate, symbol_size, recoverd_signal);
         String res = demodulate();
         System.out.println(res);
+        fsk_demodulator = null;
+        modulated = null;
+        System.gc();
     }
 
     public String demodulate() {

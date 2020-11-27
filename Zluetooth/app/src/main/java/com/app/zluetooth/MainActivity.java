@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initTransmit() {
+        System.gc();
         mediaplayer = new MediaPlayer();
         String root = Environment.getExternalStorageDirectory().toString();
         File dir = new File(root, "0ZlueTooth");
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void generate() {
+        System.gc();
         transmitter = new Transmitter(modulation, src, sample_rate, symbol_size, sample_period, number_of_carriers, getApplicationContext());
         System.out.println("Writing WavFile");
         transmitter.writeAudio();
@@ -153,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "编码完成", Toast.LENGTH_SHORT).show();
                 final Context context = getApplicationContext();
                 src = mEdit.getText().toString();
+                System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" + src);
                 while (src.length() < 5) {
                     src += " ";
                 }
