@@ -3,6 +3,7 @@ package com.app.zluetooth;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Receiver {
 
@@ -17,7 +18,6 @@ public class Receiver {
     private ArrayList<Integer> demodulated;
 
 
-    //    private static ImageHandler image_handler;
     private FSK_Demodulator fsk_demodulator;
     private AudioHandler audio_handler;
     private StringHanlder string_handler;
@@ -25,7 +25,6 @@ public class Receiver {
     private ArrayList<Double> recoverd_signal;
 
     private String recoverd_string;
-
 
     private Context context;
 
@@ -39,7 +38,6 @@ public class Receiver {
         this.duration = duration;
         this.number_of_carriers = number_of_carriers;
         this.context = context;
-
     }
 
     public void record() {
@@ -48,59 +46,104 @@ public class Receiver {
             r.start();
             Thread.sleep((long) duration * 1000);
             r.stop();
-            System.out.println("Recorded Data");
             audio_handler = new AudioHandler(context, file_name);
-            System.out.println("Reading Data");
             modulated = audio_handler.read();
-            concatinateRecording();
-            System.out.println("Initializing matched filter");
-
-            matched_filter = new MatchedFilter(duration, symbol_size, sample_rate, modulated);
-            recoverd_signal = new ArrayList<Double>();
-            System.out.println("Signal Recovered.");
-
-            recoverd_signal.addAll(matched_filter.getRecovered_signal());
-
-
-
-            System.out.println("This is the size of recoeverd signal: " + recoverd_signal.size());
-
-
-            audio_handler = new AudioHandler(toArray(recoverd_signal), context, "Recovered.wav");
-            audio_handler.writeFile();
-            audio_handler.close();
-
-            fsk_demodulator = new FSK_Demodulator(sample_rate, symbol_size, recoverd_signal);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    public void demodulate() {
+    public void record_start() {
+        try {
+            r = new Recorder("TEST");
+            r.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void record_stop() {
+        try {
+            r.stop();
+            audio_handler = new AudioHandler(context, file_name);
+            modulated = audio_handler.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+     // 使用阈值判断和梯度检测的方式判断同步码位置
+    public int locate_start() {
+        List<Double> sub_signal = new ArrayList<>();
+        sub_signal = modulated.subList(0, (int)(symbol_size * sample_rate));
+        ArrayList<Double> temp_signal = new ArrayList<>(sub_signal);
+
+        matched_filter = new MatchedFilter(duration, symbol_size, sample_rate,  temp_signal);
+
+        ArrayList<Double> res = matched_filter.get_start_index();
+        int start_index = -1;
+        double last_max = 1;
+        if(res.size() != 0) {
+            last_max = res.get(0);
+            double temp = res.get(1);
+            start_index = (int) temp;
+        }
+
+        int offset = 0;
+
+        while(offset + (int)(symbol_size * sample_rate) < modulated.size()) {
+            offset += symbol_size * sample_rate;
+            sub_signal = modulated.subList(offset, (int)(offset + symbol_size * sample_rate));
+            temp_signal = new ArrayList<>(sub_signal);
+            matched_filter = new MatchedFilter(duration, symbol_size, sample_rate, temp_signal);
+            res = matched_filter.get_start_index();
+            if(res.size() != 0) {
+                 double cur_max = res.get(0);
+                 double temp = res.get(1);
+                 if((last_max > 0.001 && (cur_max / last_max) >= 40)) {
+                     start_index = (int) temp;
+                     break;
+                 }
+                 last_max = cur_max;
+            }
+            matched_filter = null; // System.gc(); 内存垃圾回收
+        }
+        return start_index + offset;
+    }
+
+    public void recover_signal() {
+
+        int start_index = locate_start();
+        if(start_index == -1) {
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            System.out.println("S I G N A L   R E C O V E R E D   F A I L E D, P L Z   T R Y   A G A I N.");
+        }
+
+        recoverd_signal = new ArrayList<Double>();
+        System.out.println("Start index is at " + start_index);
+        System.out.println("Size of signal is" + modulated.size());
+        System.out.println("Recovered String");
+        System.out.println("----------------------------------------------------------------");
+
+        recoverd_signal.addAll(modulated.subList(start_index, modulated.size()));
+        fsk_demodulator = new FSK_Demodulator(sample_rate, symbol_size, recoverd_signal);
+        String res = demodulate();
+        System.out.println(res);
+    }
+
+    public String demodulate() {
         if(recoverd_signal.get(0) == -1.0)
         {
             recoverd_string = "-1";
-            return;
+            return "no signal";
         }
 
-        System.out.println("Starting Demodulation");
         fsk_demodulator.demodulate();
         demodulated = fsk_demodulator.getDemodulated();
-        System.out.println("This is the size of demodulated: " + demodulated.size());
-
-
         printBitStream();
-
-
         string_handler = new StringHanlder(demodulated);
         recoverd_string = string_handler.getString();
-
-
-        System.out.println("THIS IS DEMODULATED STRING:");
-        System.out.println("________________________________________________________________________________________________________");
-        System.out.println(recoverd_string);
+        return recoverd_string;
     }
 
     public void printBitStream() {
@@ -110,27 +153,7 @@ public class Receiver {
         System.out.println("");
     }
 
-    public Double[] toArray(ArrayList<Double> input) {
-        Double[] ret = new Double[input.size()];
-        for (int i = 0; i < input.size(); i++) {
-            ret[i] = input.get(i);
-        }
-
-        return ret;
-    }
-
-
     public String getRecoverd_string() {
         return recoverd_string;
-    }
-
-    public void concatinateRecording() {
-        System.out.println("Concateting recoded waveform.");
-
-        while (modulated.size() != 524288) {
-            modulated.remove(modulated.size() - 1);
-        }
-        System.out.println("This is the size of concatinated waveform: " + modulated.size());
-
     }
 }

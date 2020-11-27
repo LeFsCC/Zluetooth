@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 
 public class Recorder {
 
@@ -33,6 +34,8 @@ public class Recorder {
     short[] buffer;
     private Thread recordingThread = null;
     private boolean isRecording = false;
+
+    public ArrayList<Double> volume = new ArrayList<>();
 
     //Constructor
     public Recorder(String uniquename) {
@@ -68,12 +71,6 @@ public class Recorder {
         else{
             System.out.println("AGC NOT AVAILIABLE");
         }
-
-        //recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        //recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        //recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-
-
     }
 
     public void start() throws IllegalStateException, IOException {
@@ -100,31 +97,20 @@ public class Recorder {
     }
 
     public boolean isRecording() {
-        if (recorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING)
-            return true;
-        else
-            return false;
+        return recorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING;
     }
 
 
     private void stopRecording() {
-        // stops the recording activity
-
         if (null != recorder) {
             isRecording = false;
-
             recorder.stop();
-
-
             recorder.release();
-
             recorder = null;
             recordingThread = null;
         }
-        // copy the recorded file to original copy & delete the recorded copy
         copyWaveFile(getTempFilename(), getFilename());
-//        deleteTempFile();
-    } // stores the file into the SDCARD
+    }
 
     private String getFilename() {
         System.out.println("---3---");
@@ -138,14 +124,6 @@ public class Recorder {
         return (file.getAbsolutePath() + "/" + AUDIO_RECORDER_FILE_EXT_WAV);
     }
 
-
-    private void deleteTempFile() {
-        File file = new File(getTempFilename());
-
-        file.delete();
-    }
-
-
     private void copyWaveFile(String inFilename, String outFilename) {
         System.out.println("---8---");
         FileInputStream in = null;
@@ -156,13 +134,11 @@ public class Recorder {
         int channels = RECORDER_CHANNELS_INT;
         long byteRate = RECORDER_BPP * RECORDER_SAMPLERATE * channels / 8;
 
-
         try {
             in = new FileInputStream(inFilename);
             out = new FileOutputStream(outFilename);
             totalAudioLen = in.getChannel().size();
             totalDataLen = totalAudioLen + 36;
-
 
            WriteWaveFileHeader(out, totalAudioLen, totalDataLen, longSampleRate, channels, byteRate);
             byte[] bytes2 = new byte[buffer.length * 2];
@@ -181,7 +157,6 @@ public class Recorder {
         }
     }
 
-    // stores the file into the SDCARD
     private String getTempFilename() {
         // Creates the temp file to store buffer
         System.out.println("---4-1--");
@@ -204,48 +179,34 @@ public class Recorder {
     }
 
     private void writeAudioDataToFile() {
-
-        // Write the output audio in byte
         byte data[] = new byte[bufferSize];
 
         String filename = getTempFilename();
-        //
         FileOutputStream os = null;
-        //
         try {
-            //
             os = new FileOutputStream(filename);
-            //
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         int read = 0;
 
-
-        // if (null != os) {
         while (isRecording) {
-            // gets the voice output from microphone to byte format
-            recorder.read(buffer, 0, buffer.length);
-            // read = recorder.read(data, 0, 6144);
+            int r = recorder.read(buffer, 0, buffer.length);
+            long v = 0;
+            for(short value : buffer) {
+                v += value * value;
+            }
+            double mean = v / (double) r;
+            this.volume.add(10 * Math.log10(mean));
 
             if (AudioRecord.ERROR_INVALID_OPERATION != read) {
                 try {
-                    // // writes the data to file from buffer
-                    // // stores the voice buffer
-
-                    // short[] shorts = new short[bytes.length/2];
-                    // to turn bytes to shorts as either big endian or little
-                    // endian.
-                    // ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shorts);
-
-                    // to turn shorts back to bytes.
                     byte[] bytes2 = new byte[buffer.length * 2];
                     ByteBuffer.wrap(bytes2).order(ByteOrder.LITTLE_ENDIAN)
                             .asShortBuffer().put(buffer);
 
                     os.write(bytes2);
-                    //  ServerInteractor.SendAudio(buffer);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -257,6 +218,16 @@ public class Recorder {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public double getVolume() {
+        double sum = 0;
+        for(double t : volume) {
+            sum += t;
+        }
+        int size = volume.size();
+        volume.clear();
+        return sum / size;
     }
 
     private void WriteWaveFileHeader(FileOutputStream out, long totalAudioLen,

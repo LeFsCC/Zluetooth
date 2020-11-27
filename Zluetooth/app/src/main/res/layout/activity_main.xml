@@ -107,7 +107,7 @@
                 android:id="@+id/decode_btn"
                 android:layout_marginLeft="30dp"
                 android:layout_width="120dp"
-                android:text="解 码"
+                android:text="接收停止"
                 android:textSize="17sp"
                 android:textColor="#3E3838"
                 android:background="@drawable/button_style"

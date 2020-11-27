@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static String TAG = "Permission";
     private static final int REQUEST_WRITE_STORAGE = 112;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         modulation = "FSK";
         sample_rate = 44100.0;
-        symbol_size = 0.5;
+        symbol_size = 0.2;
         sample_period = 1.0 / sample_rate;
-        duration = 12;     //duration = src.length * 16 * symbol_size / 7
-        number_of_carriers = 16;
+        duration = 32;     //duration = src.length * 16 * symbol_size / 7
+
+        number_of_carriers = RigidData.number_of_carriers;
 
         Permissions.requestWritePermissions(this, MainActivity.this);
         Permissions.requestRecordPermissions(this, MainActivity.this);
@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         transmit_btn = findViewById(R.id.transmit_btn);
         receive_btn = findViewById(R.id.receive_btn);
         encode_btn = findViewById(R.id.encode_btn);
+        recovered_textView = findViewById(R.id.decode_data_txt);
+
         decode_btn.setOnClickListener(this);
         transmit_btn.setOnClickListener(this);
         receive_btn.setOnClickListener(this);
@@ -117,16 +119,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void record() {
-        long startTime = System.nanoTime();
-
+        recovered_textView.setText("");
+        Toast.makeText(this, "开始录音", Toast.LENGTH_SHORT).show();
         receiver = new Receiver("recorded.wav", sample_rate, symbol_size, duration, number_of_carriers, getApplicationContext());
-        receiver.record();
-        receiver.demodulate();
-        recovered_string = "aaaa";
+        receiver.record_start();
+    }
+
+    public void decode() {
+        Toast.makeText(this, "录音结束", Toast.LENGTH_SHORT).show();
+        receiver.record_stop();
+        receiver.recover_signal();
+        recovered_string = "";
         recovered_string = receiver.getRecoverd_string();
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime) / 1000000;
-        System.out.println("Time taken for Reception: " + duration + "ms");
+        recovered_textView.setText(recovered_string);
     }
 
     @Override
@@ -137,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.decode_btn:{
+                decode();
                 break;
             }
             case R.id.transmit_btn:{
@@ -144,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.encode_btn:{
-                Toast.makeText(this, "别点我", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "编码完成", Toast.LENGTH_SHORT).show();
                 final Context context = getApplicationContext();
                 src = mEdit.getText().toString();
                 while (src.length() < 5) {
@@ -153,8 +159,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 generate();
                 break;
             }
-
-
         }
     }
 }

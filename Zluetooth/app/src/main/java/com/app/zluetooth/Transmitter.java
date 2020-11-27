@@ -48,8 +48,6 @@ public class Transmitter {
 
     }
 
-
-//    初始化二进制序列
     public void initString(){
         string_handler = new StringHanlder(src);
         System.out.println("This is the length of Data : " + string_handler.getB().length);
@@ -58,7 +56,6 @@ public class Transmitter {
 
     }
 
-//    使用FSK调制
     public void initModulator (){
         if (modulation.equals("FSK")) {
             fsk_modulator = new FSK_Modulator(data, sample_rate, symbol_size, number_of_carriers);
@@ -71,7 +68,6 @@ public class Transmitter {
         audio_handler = new AudioHandler(castToDouble(modulated),context,"FSK.wav");
         audio_handler.writeFile();
         audio_handler.close();
-
     }
 
     public Double[] castToDouble(ArrayList<Double> in ){

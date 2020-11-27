@@ -32,9 +32,6 @@ public class MatchedFilter {
 
     private SignalGenerator signal_generator;
 
-    public MatchedFilter() {
-    }
-
     public MatchedFilter(double duration, double symbol_size, double sample_rate, ArrayList<Double> modulated) {
         this.duration = duration;
         this.symbol_size = symbol_size;
@@ -45,87 +42,54 @@ public class MatchedFilter {
         this.recovered_signal = new ArrayList<Double>();
         getSync();
         matchSignal();
-        recoverSignal();
     }
 
     public void getSync() {
-        System.out.println("Generating Sync Signal");
-
-        signal_generator = new SignalGenerator(symbol_size, 16000, sample_period);
+        signal_generator = new SignalGenerator(symbol_size, RigidData.sync_fs, sample_period);
         signal_generator.generate_sync();
         chirp_signal = signal_generator.getSync();
         chirp_signal_a = toArray((chirp_signal));
-
         Collections.reverse(chirp_signal);
-
-
     }
-
 
     public void matchSignal() {
         try {
-
-            System.out.println("Applying matched Filter");
-
-            System.out.println("This is size of zero padded modulated waveform " + modulated.size());
             fft = new DoubleFFT_1D(modulated.size());
-
             signal_fft = new double[modulated.size() * 2];
             System.arraycopy(toArray(modulated), 0, signal_fft, 0, modulated.size());
             fft.realForwardFull(signal_fft);
-
-
             chirp_fft = new double[modulated.size() * 2];
             System.arraycopy(chirp_signal_a, 0, chirp_fft, 0, chirp_signal_a.length);
-
             fft.realForwardFull(chirp_fft);
-            System.out.println("Frequency Domain Transforms complete");
-
             filter_out = new double[signal_fft.length];
             for (int i = 0; i < signal_fft.length; i++) {
                 filter_out[i] = chirp_fft[i] * signal_fft[i];
             }
             fft.realInverseFull(filter_out, true);
-            System.out.println("Multiplication and IFFT Complete");
-
-
             filter_out = abs(filter_out);
-            System.out.println("Absoloute Value found");
-
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    public void recoverSignal() {
+    public ArrayList<Double> get_start_index() {
+        ArrayList<Double> res = new ArrayList<>();
         try {
-            System.out.println("Recovering Signal");
-
             double[] sorted = new double[filter_out.length];
             System.arraycopy(filter_out, 0, sorted, 0, filter_out.length);
 
             Arrays.sort(sorted);
             double max = sorted[sorted.length - 1];
-            System.out.println("This is min: " + sorted[0]);
-            System.out.println("This is max: " + max);
 
-            System.out.println("Finding Max index");
             start_index = maxIndex(filter_out, max) +(int) (symbol_size*sample_rate);
-            System.out.println("Offset is: " + (int) (symbol_size*sample_rate));
-            System.out.println("!!!!!!!!!!!!!!max is: " + (int) (start_index));
-
-
-            for (int n = start_index; n < start_index + 441000 && n<modulated.size(); n++) {
-                recovered_signal.add(modulated.get(n));
-
-            }
-
+            System.out.println("This is max: " + max);
+            System.out.println("This is max index: " + start_index);
+            res.add(max);
+            res.add((double)start_index);
+            return res;
         } catch (Exception e) {
-            e.printStackTrace();
-            recovered_signal.clear();
-            recovered_signal.add(-1.0);
+            return res;
         }
     }
 
@@ -134,16 +98,10 @@ public class MatchedFilter {
         for (int i = 0; i < input.length; i++) {
             if (input[i] == max) {
                 max_ = i;
-                System.out.println("Max index found");
                 break;
             }
         }
         return max_;
-
-    }
-
-    public ArrayList<Double> getRecovered_signal() {
-        return recovered_signal;
     }
 
     public double[] toArray(ArrayList<Double> in) {
@@ -151,16 +109,6 @@ public class MatchedFilter {
         for (int i = 0; i < in.size(); i++) {
             ret[i] = in.get(i);
         }
-
-        return ret;
-    }
-
-    public ArrayList<Double> toArrayList(double[] in) {
-        ArrayList<Double> ret = new ArrayList<Double>();
-        for (int i = 0; i < in.length; i++) {
-            ret.add(in[i]);
-        }
-
 
         return ret;
     }
@@ -173,19 +121,5 @@ public class MatchedFilter {
         }
 
         return ret;
-    }
-
-    public ArrayList<Double> zeroPad(ArrayList<Double> input){
-        ArrayList<Double> r  = new ArrayList<Double>();
-        for (int i = 0; i < 1048576; i++) {
-            if (i < input.size()){
-                r.add (input.get(i));
-            }
-            else{
-                r.add(-1.0);
-            }
-        }
-
-        return r;
     }
 }

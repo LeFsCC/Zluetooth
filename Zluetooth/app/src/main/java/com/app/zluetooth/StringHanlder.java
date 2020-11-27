@@ -14,16 +14,15 @@ public class StringHanlder {
 //    得到src二进制序列
     public StringHanlder(String src) { //Constructor For Getting Binary Sequence
         this.src = src;
-        this.bits = 16;                 //16 for UTF-16
+        this.bits = RigidData.number_of_carriers;
         generate();
     }
 
     public StringHanlder(ArrayList<Integer> demodulated) {
         this.demodulated = demodulated;
-        this.bits = 16;                 //16 for UTF-16
-
+        this.bits = RigidData.number_of_carriers;
     }
-// 产生二进制序列函数
+
     public void generate() {
         String temp = toBinary();
         System.out.println("This is Binary String temp: " + temp);
@@ -33,7 +32,7 @@ public class StringHanlder {
             b[i] = Integer.parseInt(temp.substring(i, i + 1));
         }
     }
-// 这个函数有改的空间，写得怪怪的
+
     public String toBinary() {
         String result = "";
         String tmpStr;
@@ -60,33 +59,27 @@ public class StringHanlder {
             } else {//刚好16位
                 result += tmpStr;
             }
-//            result += " "; // separator
         }
-
         return result;
     }
 
-//    二进制序列变为十六进制的字符
     public String getString() {
         String bin = arToString();
         StringBuilder b = new StringBuilder();
         int len = bin.length();
         int i = 0;
-        while (i + 16 <= len) {
-            char c = convert(bin.substring(i, i + 16));
-            i += 16;
+        while (i + RigidData.number_of_carriers <= len) {
+            char c = convert(bin.substring(i, i + RigidData.number_of_carriers));
+            i += RigidData.number_of_carriers;
             b.append(c);
         }
-        String recovered = b.toString();
-        System.out.println(recovered);
-        return recovered;
+        return b.toString();
     }
 
     private char convert(String bs) {
         return (char) Integer.parseInt(bs, 2);
     }
 
-//    解调恢复二进制序列
     public String arToString() {
         String r = "";
         for (int i : demodulated) {
