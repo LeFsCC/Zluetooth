@@ -26,11 +26,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Transmitter transmitter;
     private Receiver receiver;
-    private String modulation;
     private String src;
-    private double duration;
-    private double sample_rate;
-    private double symbol_size;
+    private double sample_freq;
+    private double pulse_sep;
     private double sample_period;
     private int number_of_carriers;
     private MediaPlayer mediaplayer;
@@ -49,13 +47,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        modulation = "FSK";
-        sample_rate = 44100.0;
-        symbol_size = 0.2;
-        sample_period = 1.0 / sample_rate;
-        duration = 32;     //duration = src.length * 16 * symbol_size / 7
-
+        
+        sample_freq = RigidData.sample_freq;
+        pulse_sep = RigidData.pulse_sep;
+        sample_period = 1.0 / sample_freq;
         number_of_carriers = RigidData.number_of_carriers;
 
         Permissions.requestWritePermissions(this, MainActivity.this);
@@ -117,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void generate() {
         System.gc();
-        transmitter = new Transmitter(modulation, src, sample_rate, symbol_size, sample_period, number_of_carriers, getApplicationContext());
+        transmitter = new Transmitter(src, sample_freq, pulse_sep, number_of_carriers, getApplicationContext());
         System.out.println("Writing WavFile");
         transmitter.writeAudio();
         System.out.println("WaveFile Written. Thread waiting");
@@ -126,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void record() {
         recovered_textView.setText("");
         Toast.makeText(this, "开始录音", Toast.LENGTH_SHORT).show();
-        receiver = new Receiver("recorded.wav", sample_rate, symbol_size, duration, number_of_carriers, getApplicationContext());
+        receiver = new Receiver("recorded.wav", sample_freq, pulse_sep, number_of_carriers, getApplicationContext());
         receiver.record_start();
     }
 
@@ -155,14 +150,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.encode_btn:{
-                Toast.makeText(this, "编码完成", Toast.LENGTH_SHORT).show();
-                final Context context = getApplicationContext();
                 src = mEdit.getText().toString();
-                System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" + src);
-                while (src.length() < 5) {
-                    src += " ";
+                Log.e("待发送的字符串为：",src);
+                if(src.length()<5){
+                    int tmp=5-src.length();
+                    for(int i=0;i<tmp;i++){
+                        src += " ";
+                    }
                 }
                 generate();
+                Toast.makeText(this, "编码完成", Toast.LENGTH_SHORT).show();
                 break;
             }
         }

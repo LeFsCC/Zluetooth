@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.app.zluetooth.Utils.MyAudio;
 import com.app.zluetooth.Utils.Recorder;
-import com.app.zluetooth.Utils.StringHanlder;
+import com.app.zluetooth.Utils.StringAndBinary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +16,14 @@ public class Receiver {
 
     private double sample_rate;
     private double symbol_size;
-    private double sample_period;
     private double duration;
-    private int number_of_carriers;
     private ArrayList<Double> modulated;
     private ArrayList<Integer> demodulated;
 
 
     private Demodulator fsk_demodulator;
     private MyAudio audio_handler;
-    private StringHanlder string_handler;
+    private StringAndBinary string_handler;
     private MatchedFilter matched_filter;
     private ArrayList<Double> recoverd_signal;
 
@@ -35,13 +33,10 @@ public class Receiver {
 
     private Recorder r;
 
-    public Receiver(String file_name, double sample_rate, double symbol_size, double duration, int number_of_carriers, Context context) {
+    public Receiver(String file_name, double sample_rate, double symbol_size, int number_of_carriers, Context context) {
         this.file_name = file_name;
         this.sample_rate = sample_rate;
-        this.sample_period = 1.0 / sample_rate;
         this.symbol_size = symbol_size;
-        this.duration = duration;
-        this.number_of_carriers = number_of_carriers;
         this.context = context;
     }
 
@@ -138,7 +133,7 @@ public class Receiver {
         fsk_demodulator.demodulate();
         demodulated = fsk_demodulator.getDemodulated();
         printBitStream();
-        string_handler = new StringHanlder(demodulated);
+        string_handler = new StringAndBinary(demodulated);
         recoverd_string = string_handler.getString();
         return recoverd_string;
     }
