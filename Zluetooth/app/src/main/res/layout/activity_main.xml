@@ -12,6 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
         <ImageView
@@ -41,6 +44,7 @@
             android:id="@+id/raw_data_txt"
             android:layout_width="350dp"
             android:layout_height="210dp"
+
             android:background="@drawable/textview_border"
             android:hint="在此处输入原始数据"
             android:textAlignment="center">
@@ -51,6 +55,7 @@
             android:id="@+id/decode_data_txt"
             android:layout_width="350dp"
             android:layout_height="210dp"
+
             android:layout_marginTop="20dp"
             android:background="@drawable/textview_border"
             android:hint="此处将显示解码数据"
