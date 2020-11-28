@@ -4,26 +4,21 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.app.zluetooth.Utils.WavFile;
-
 import java.io.File;
 import java.util.ArrayList;
 
-//音频处理类
-public class AudioHandler {
+public class MyAudio {
 
     private double sample_rate;
     private double duration;
     private long n_frames;
     private WavFile wavfile;
-    private Double[] src;
     private double[] data;
     private String filename;
     private ArrayList<Double> modulated;
-    private ArrayList<Double> recordedData;
-    private long n;
 
-    public AudioHandler(Context context, String filename) {
+
+    public MyAudio(Context context, String filename) {
         this.filename = filename;
         try {
             String root = Environment.getExternalStorageDirectory().toString();
@@ -35,8 +30,8 @@ public class AudioHandler {
         }
     }
 
-    public AudioHandler(Double[] src, Context context, String filename) { //Overloaded Constructor For Writing
-        this.src = src;
+    public MyAudio(Double[] src, Context context, String filename) { //Overloaded Constructor For Writing
+
         System.out.println("This is the size of the modulated file: " + src.length);
         this.sample_rate = 44100;
         this.duration = src.length / sample_rate;
@@ -75,11 +70,7 @@ public class AudioHandler {
 
     }
 
-    public void addBuffer(short[] audioBuffer) {
-        for (int i = 0; i < audioBuffer.length; i++) {
-            recordedData.add((double) audioBuffer[i]);
-        }
-    }
+
 
     public void writeFile() {
 
@@ -108,7 +99,6 @@ public class AudioHandler {
 
     public ArrayList<Double> read() {
         modulated = new ArrayList<Double>();
-        n = 0;
         double[] buffer = new double[100];
         int framesRead;
         try {
@@ -142,7 +132,4 @@ public class AudioHandler {
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    public void getInfo() {
-        wavfile.display();
-    }
 }

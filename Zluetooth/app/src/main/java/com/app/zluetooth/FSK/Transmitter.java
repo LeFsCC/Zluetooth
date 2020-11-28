@@ -2,7 +2,7 @@ package com.app.zluetooth.FSK;
 
 import android.content.Context;
 
-import com.app.zluetooth.Utils.AudioHandler;
+import com.app.zluetooth.Utils.MyAudio;
 import com.app.zluetooth.Utils.StringHanlder;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class Transmitter {
     private static ArrayList<Double> modulated;
 
     private static Modulator fsk_modulator;
-    private static AudioHandler audio_handler;
+    private static MyAudio audio_handler;
     private static StringHanlder string_handler;//获得二进制序列
 
     private static Context context;
@@ -68,7 +68,7 @@ public class Transmitter {
     }
 
     public void writeAudio (){
-        audio_handler = new AudioHandler(castToDouble(modulated),context,"FSK.wav");
+        audio_handler = new MyAudio(castToDouble(modulated),context,"FSK.wav");
         audio_handler.writeFile();
         audio_handler.close();
     }

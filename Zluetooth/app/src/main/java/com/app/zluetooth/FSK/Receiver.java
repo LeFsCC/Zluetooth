@@ -3,7 +3,7 @@ package com.app.zluetooth.FSK;
 import android.content.Context;
 import android.util.Log;
 
-import com.app.zluetooth.Utils.AudioHandler;
+import com.app.zluetooth.Utils.MyAudio;
 import com.app.zluetooth.Utils.Recorder;
 import com.app.zluetooth.Utils.StringHanlder;
 
@@ -24,7 +24,7 @@ public class Receiver {
 
 
     private Demodulator fsk_demodulator;
-    private AudioHandler audio_handler;
+    private MyAudio audio_handler;
     private StringHanlder string_handler;
     private MatchedFilter matched_filter;
     private ArrayList<Double> recoverd_signal;
@@ -59,7 +59,7 @@ public class Receiver {
             r.stop();
             double avg_vol = r.getVolume();
             Log.e("该段录音平均音量大小：", String.valueOf(avg_vol));
-            audio_handler = new AudioHandler(context, file_name);
+            audio_handler = new MyAudio(context, file_name);
             modulated = audio_handler.read();
         } catch (Exception e) {
             e.printStackTrace();
