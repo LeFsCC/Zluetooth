@@ -11,18 +11,18 @@ public class Modulator {
     private static double symbol_size;
     private static int number_of_carriers;
     private static int[] frequencies;
-    private static int fs;                    //开始频率
+    private static int fs;
     private static ArrayList<Double> modulated;
     private static ArrayList<SignalGenerator> carriers;
 
-    int t_0[] = {0, 0, 0};
-    int t_1[] = {0, 0, 1};
-    int t_2[] = {0, 1, 0};
-    int t_3[] = {0, 1, 1};
-    int t_4[] = {1, 0, 0};
-    int t_5[] = {1, 0, 1};
-    int t_6[] = {1, 1, 0};
-    int t_7[] = {1, 1, 1};
+//    int t_0[] = {0, 0, 0};
+//    int t_1[] = {0, 0, 1};
+//    int t_2[] = {0, 1, 0};
+//    int t_3[] = {0, 1, 1};
+//    int t_4[] = {1, 0, 0};
+//    int t_5[] = {1, 0, 1};
+//    int t_6[] = {1, 1, 0};
+//    int t_7[] = {1, 1, 1};
 
 
     public Modulator(int[] data, double sample_rate, double symbol_size, int number_of_carriers) {
@@ -77,32 +77,41 @@ public class Modulator {
     }
 
     public void map8(int[] temp) {
-        if (Arrays.equals(temp, t_0)) {
-            modulated.addAll(carriers.get(0).generate());
-
-        } else if (Arrays.equals(temp, t_1)) {
-            modulated.addAll(carriers.get(1).generate());
-
-        } else if (Arrays.equals(temp, t_2)) {
-            modulated.addAll(carriers.get(2).generate());
-
-        } else if (Arrays.equals(temp, t_3)) {
-            modulated.addAll(carriers.get(3).generate());
-
-        } else if (Arrays.equals(temp, t_4)) {
-            modulated.addAll(carriers.get(4).generate());
-
-        } else if (Arrays.equals(temp, t_5)) {
-            modulated.addAll(carriers.get(5).generate());
-
-        } else if (Arrays.equals(temp, t_6)) {
-            modulated.addAll(carriers.get(6).generate());
-
-        } else if (Arrays.equals(temp, t_7)) {
-            modulated.addAll(carriers.get(7).generate());
-        }
+        modulated.addAll(carriers.get(toNumber(temp)).generate());
+//        if (Arrays.equals(temp, t_0)) {
+//            modulated.addAll(carriers.get(0).generate());
+//
+//        } else if (Arrays.equals(temp, t_1)) {
+//            modulated.addAll(carriers.get(1).generate());
+//
+//        } else if (Arrays.equals(temp, t_2)) {
+//            modulated.addAll(carriers.get(2).generate());
+//
+//        } else if (Arrays.equals(temp, t_3)) {
+//            modulated.addAll(carriers.get(3).generate());
+//
+//        } else if (Arrays.equals(temp, t_4)) {
+//            modulated.addAll(carriers.get(4).generate());
+//
+//        } else if (Arrays.equals(temp, t_5)) {
+//            modulated.addAll(carriers.get(5).generate());
+//
+//        } else if (Arrays.equals(temp, t_6)) {
+//            modulated.addAll(carriers.get(6).generate());
+//
+//        } else if (Arrays.equals(temp, t_7)) {
+//            modulated.addAll(carriers.get(7).generate());
+//        }
     }
 
+    private int toNumber(int[] temp) {
+        StringBuilder ee = new StringBuilder();
+        for(int t: temp) {
+            ee.append(t);
+        }
+        System.out.println(ee);
+        return Integer.parseInt(ee.toString(), 2);
+    }
 
     public ArrayList<Double> getModulated() {
         return modulated;

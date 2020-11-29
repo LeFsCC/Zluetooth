@@ -43,12 +43,10 @@ public class SignalGenerator {
     }
 
     public ArrayList<Double> generate_sync() {
-
         sync = new ArrayList<Double>();
         double rad = 0;
         double k = ((RigidData.sync_fs - RigidData.fs) / symbol_size);
         for (int i = 0; i < symbol_size * sample_rate; i++) {
-
             rad = (2 * Math.PI * ((k / 2) * i * step_size + RigidData.fs) * i * step_size);
             sync.add(Math.cos(rad));
         }

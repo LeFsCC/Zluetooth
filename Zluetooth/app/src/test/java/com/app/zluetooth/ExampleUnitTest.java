@@ -10,12 +10,13 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        double[] in = new double[4];
-        for(int i = 0;i < 4; i++) {
-            in[i] = i;
+        int[] temp = {0, 1, 1};
+        String ee = "";
+        for(int t: temp) {
+            ee += String.valueOf(t);
         }
-        double[] out = new double[8];
-        System.arraycopy(in, 0, out, 0, 4);
-        System.out.println(Arrays.toString(out));
+        System.out.println(ee);
+        int ii = Integer.parseInt(ee, 2);
+        System.out.println(ii);
     }
 }

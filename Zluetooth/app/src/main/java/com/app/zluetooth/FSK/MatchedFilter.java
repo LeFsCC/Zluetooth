@@ -20,8 +20,6 @@ public class MatchedFilter {
     private double[] signal_fft;
     private double[] filter_out;
 
-
-    private int max_index;
     private int start_index;
 
     private ArrayList<Double> modulated;
@@ -123,9 +121,7 @@ public class MatchedFilter {
         double[] ret = new double[input.length];
         for (int i = 0; i < input.length; i++) {
             ret[i] = Math.abs(input[i]);
-
         }
-
         return ret;
     }
 }

@@ -1,7 +1,6 @@
 package com.app.zluetooth.WiFiComm;
 
 import android.content.Context;
-import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -25,22 +24,6 @@ public class ApManager {
             return (Boolean) method.invoke(wifimanager);
         }
         catch (Throwable ignored) {}
-        return false;
-    }
-
-    public static boolean configApState(Context context) {
-        WifiManager wifimanager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        try {
-            if(isApOn(context)) {
-                wifimanager.setWifiEnabled(false);
-            }
-            Method method = wifimanager.getClass().getMethod("setWifiApEnabled", WifiConfiguration.class, boolean.class);
-            method.invoke(wifimanager, null, !isApOn(context));
-            return true;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
         return false;
     }
 
@@ -73,7 +56,6 @@ public class ApManager {
             if (wifiManager != null) {
                 WifiInfo wifiInfo = wifiManager.getConnectionInfo();
                 int ipInt = wifiInfo.getIpAddress();
-                Log.e("IP address : ", InetAddress.getByAddress(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(ipInt).array()).getHostAddress());
                 return InetAddress.getByAddress(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(ipInt).array()).getHostAddress();
             }
         }
