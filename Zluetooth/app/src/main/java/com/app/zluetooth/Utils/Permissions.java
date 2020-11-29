@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat;
 public class Permissions {
     private static String TAG = "Permission";
     private static final int REQUEST_WRITE_STORAGE = 112;
-    private static final int permission_req_code =  1000;
 
 //  记录权限/录音
     public static void requestRecordPermissions(final Context context, final Activity activity) {

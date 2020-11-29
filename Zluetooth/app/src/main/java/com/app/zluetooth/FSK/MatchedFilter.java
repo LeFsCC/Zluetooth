@@ -38,8 +38,7 @@ public class MatchedFilter {
         this.sample_rate = sample_rate;
         this.sample_period = 1.0 / sample_rate;
         this.modulated = modulated;
-
-        this.recovered_signal = new ArrayList<Double>();
+        this.recovered_signal = new ArrayList<>();
         getSync();
         matchSignal();
     }
@@ -60,18 +59,13 @@ public class MatchedFilter {
             fft.realForwardFull(signal_fft);
             chirp_fft = new double[modulated.size() * 2];
             System.arraycopy(chirp_signal_a, 0, chirp_fft, 0, chirp_signal_a.length);
-
             fft.realForwardFull(chirp_fft);
-
             filter_out = new double[signal_fft.length];
             for (int i = 0; i < signal_fft.length; i++) {
                 filter_out[i] = chirp_fft[i] * signal_fft[i];
             }
-
             fft.realInverseFull(filter_out, true);
-
             filter_out = abs(filter_out);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,13 +76,9 @@ public class MatchedFilter {
         try {
             double[] sorted = new double[filter_out.length];
             System.arraycopy(filter_out, 0, sorted, 0, filter_out.length);
-
             Arrays.sort(sorted);
             double max = sorted[sorted.length - 1];
-
             start_index = maxIndex(filter_out, max) +(int) (symbol_size*sample_rate);
-            System.out.println("This is max: " + max);
-            System.out.println("This is max index: " + start_index);
             res.add(max);
             res.add((double)start_index);
             return res;
@@ -98,14 +88,12 @@ public class MatchedFilter {
     }
 
     public int maxIndex(double[] input, double max) {
-        int max_ = 0;
         for (int i = 0; i < input.length; i++) {
             if (input[i] == max) {
-                max_ = i;
-                break;
+                return i;
             }
         }
-        return max_;
+        return 0;
     }
 
     public double[] toArray(ArrayList<Double> in) {
@@ -113,7 +101,6 @@ public class MatchedFilter {
         for (int i = 0; i < in.size(); i++) {
             ret[i] = in.get(i);
         }
-
         return ret;
     }
 

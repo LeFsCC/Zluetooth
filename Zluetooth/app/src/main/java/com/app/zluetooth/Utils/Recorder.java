@@ -103,7 +103,6 @@ public class Recorder {
     }
 
     private String getFilename() {
-        System.out.println("---3---");
         String filepath = Environment.getExternalStorageDirectory().getPath();
         File file = new File(filepath, AUDIO_RECORDER_FOLDER);
 
@@ -115,7 +114,6 @@ public class Recorder {
     }
 
     private void copyWaveFile(String inFilename, String outFilename) {
-        System.out.println("---8---");
         FileInputStream in = null;
         FileOutputStream out = null;
         long totalAudioLen = 0;
@@ -148,23 +146,17 @@ public class Recorder {
     }
 
     private String getTempFilename() {
-        // Creates the temp file to store buffer
-        System.out.println("---4-1--");
         String filepath = Environment.getExternalStorageDirectory().getPath();
-        System.out.println("---4-2--");
         File file = new File(filepath, AUDIO_RECORDER_FOLDER);
-        System.out.println("---4-3--");
 
         if (!file.exists()) {
             file.mkdirs();
         }
 
         File tempFile = new File(filepath, AUDIO_RECORDER_TEMP_FILE);
-        System.out.println("---4-4--");
 
         if (tempFile.exists())
             tempFile.delete();
-        System.out.println("---4-5--");
         return (file.getAbsolutePath() + "/" + AUDIO_RECORDER_TEMP_FILE);
     }
 

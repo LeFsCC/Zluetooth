@@ -5,14 +5,12 @@ import com.app.zluetooth.Exception.ZlueToothException;
 
 import java.util.ArrayList;
 
-// 把字符串转为比特序列，16进制
 public class StringAndBinary {
     private String src;
     private int[] b;
     private int bits;
     private static ArrayList<Integer> demodulated;
 
-//    得到src二进制序列
     public StringAndBinary(String src) {
         this.src = src;
         this.bits = RigidData.number_of_carriers;
@@ -38,7 +36,7 @@ public class StringAndBinary {
         String charBinary = "";
 
         for (int i = 0; i < src.length(); i++) {
-            charBinary = Integer.toBinaryString(src.charAt(i));//遍历每一个char，得到二进制串
+            charBinary = Integer.toBinaryString(src.charAt(i));
             int binaryLength = charBinary.length();
             if(binaryLength>8){
                 throw new ZlueToothException("8位无法表达！");

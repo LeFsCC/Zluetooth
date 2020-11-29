@@ -15,21 +15,12 @@ public class Modulator {
     private static ArrayList<Double> modulated;
     private static ArrayList<SignalGenerator> carriers;
 
-//    int t_0[] = {0, 0, 0};
-//    int t_1[] = {0, 0, 1};
-//    int t_2[] = {0, 1, 0};
-//    int t_3[] = {0, 1, 1};
-//    int t_4[] = {1, 0, 0};
-//    int t_5[] = {1, 0, 1};
-//    int t_6[] = {1, 1, 0};
-//    int t_7[] = {1, 1, 1};
 
-
-    public Modulator(int[] data, double sample_rate, double symbol_size, int number_of_carriers) {
-        this.data = data;
-        this.symbol_size = symbol_size;
-        this.number_of_carriers = RigidData.number_of_carriers;
-        this.fs = RigidData.fs;
+    public Modulator(int[] data, double symbol_size) {
+        Modulator.data = data;
+        Modulator.symbol_size = symbol_size;
+        Modulator.number_of_carriers = RigidData.number_of_carriers;
+        fs = RigidData.fs;
         initFrequencies();
         initCarriers();
     }
@@ -43,7 +34,7 @@ public class Modulator {
     }
 
     public void initCarriers() {
-        carriers = new ArrayList<SignalGenerator>();
+        carriers = new ArrayList<>();
         for (int i = 0; i < number_of_carriers; i++) {
             SignalGenerator s = new SignalGenerator(symbol_size, frequencies[i], 1.0 / 44100.0);
             carriers.add(s);
@@ -55,8 +46,8 @@ public class Modulator {
         double level_t = Math.log(number_of_carriers) / Math.log(2);
         int level = (int) level_t;
 
-        int temp[] = new int[level];
-        modulated = new ArrayList<Double>();
+        int[] temp = new int[level];
+        modulated = new ArrayList<>();
         for(int i = 0; i < 10000; i++) {
             modulated.add(0.002);
         }
@@ -78,30 +69,6 @@ public class Modulator {
 
     public void map8(int[] temp) {
         modulated.addAll(carriers.get(toNumber(temp)).generate());
-//        if (Arrays.equals(temp, t_0)) {
-//            modulated.addAll(carriers.get(0).generate());
-//
-//        } else if (Arrays.equals(temp, t_1)) {
-//            modulated.addAll(carriers.get(1).generate());
-//
-//        } else if (Arrays.equals(temp, t_2)) {
-//            modulated.addAll(carriers.get(2).generate());
-//
-//        } else if (Arrays.equals(temp, t_3)) {
-//            modulated.addAll(carriers.get(3).generate());
-//
-//        } else if (Arrays.equals(temp, t_4)) {
-//            modulated.addAll(carriers.get(4).generate());
-//
-//        } else if (Arrays.equals(temp, t_5)) {
-//            modulated.addAll(carriers.get(5).generate());
-//
-//        } else if (Arrays.equals(temp, t_6)) {
-//            modulated.addAll(carriers.get(6).generate());
-//
-//        } else if (Arrays.equals(temp, t_7)) {
-//            modulated.addAll(carriers.get(7).generate());
-//        }
     }
 
     private int toNumber(int[] temp) {

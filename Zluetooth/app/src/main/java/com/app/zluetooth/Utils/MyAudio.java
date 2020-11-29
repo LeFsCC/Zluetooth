@@ -31,8 +31,6 @@ public class MyAudio {
     }
 
     public MyAudio(Double[] src, Context context, String filename) { //Overloaded Constructor For Writing
-
-        System.out.println("This is the size of the modulated file: " + src.length);
         this.sample_rate = 44100;
         this.duration = src.length / sample_rate;
         this.n_frames = (long) (duration * sample_rate);
@@ -42,9 +40,7 @@ public class MyAudio {
         for (int i = 0; i < src.length; i++) {
             data[i] = (double) src[i];
         }
-
         initWrite();
-
     }
 
 
@@ -59,15 +55,11 @@ public class MyAudio {
                 }
                 n_frames = data.length;
                 this.wavfile = WavFile.newWavFile(new File(root, "0ZlueTooth/" + filename), 1, n_frames, 16, (long) sample_rate);
-                System.out.println("Wav File Written!");
                 wavfile.display();
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
 
@@ -90,15 +82,11 @@ public class MyAudio {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
-
-
     }
 
-
     public ArrayList<Double> read() {
-        modulated = new ArrayList<Double>();
+        modulated = new ArrayList<>();
         double[] buffer = new double[100];
         int framesRead;
         try {
@@ -121,7 +109,6 @@ public class MyAudio {
     public void close() {
         try {
             wavfile.close();
-
         } catch (Exception e) {
             Log.d("0ZlueTooth", e.toString());
         }

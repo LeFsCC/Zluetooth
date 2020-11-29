@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void generate() {
         System.gc();
-        transmitter = new Transmitter(src, sample_rate, symbol_size, number_of_carriers, getApplicationContext());
+        transmitter = new Transmitter(src, symbol_size, getApplicationContext());
         System.out.println("Writing WavFile");
         transmitter.writeAudio();
         System.out.println("WaveFile Written. Thread waiting");

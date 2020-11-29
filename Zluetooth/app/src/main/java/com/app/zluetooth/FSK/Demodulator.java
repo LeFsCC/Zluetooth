@@ -16,7 +16,7 @@ public class Demodulator {
     private double sample_period;
     private int number_of_carriers;
     private int[] frequencies;
-    private int fs;                    // Start Frequency
+    private int fs;
     private ArrayList<Integer> demodulated;
     private ArrayList<SignalGenerator> carriers;
     private ArrayList<Double> modulated;
@@ -66,11 +66,7 @@ public class Demodulator {
                 double max = Collections.max(holder);
                 for (int n = 0; n < holder.size(); n++) {
                     if (max == holder.get(n)) {
-                        if(RigidData.number_of_carriers == 8) {
-                            demodulated.addAll(getBits8(n));
-                        } else {
-                            throw new ZlueToothException("");
-                        }
+                        demodulated.addAll(getBits8(n));
                     }
                 }
                 holder.clear();
@@ -124,13 +120,11 @@ public class Demodulator {
         return bits;
     }
 
-
-
     public double trapz(ArrayList<Double> Carrier, double[] Symbol) {
         double r = 0;
         try {
             if (Carrier.size() != Symbol.length) {
-                throw new Exception("Symbols Are Not the Same Size");
+                return 0;
             }
 
             double sum = 0;
@@ -148,7 +142,7 @@ public class Demodulator {
     }
 
     public double[] toArray() {
-        double r[] = new double[modulated.size()];
+        double[] r = new double[modulated.size()];
         for (int i = 0; i < modulated.size(); i++) {
             r[i] = modulated.get(i);
         }

@@ -55,7 +55,6 @@ public class Receiver {
             double avg_vol = r.getVolume();
             Log.e("该段录音平均音量大小：", String.valueOf(avg_vol));
 
-            file_name = "FSK.wav";
             audio_handler = new MyAudio(context, file_name);
             modulated = audio_handler.read();
         } catch (Exception e) {
