@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        int[] temp = {0, 1, 1};
+        int[] temp = {1, 1, 1};
         String ee = "";
         for(int t: temp) {
             ee += String.valueOf(t);

@@ -136,4 +136,77 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/transmit_dis_btn"
+            android:text="发射声波"
+            android:layout_width="150dp"
+            android:layout_height="50dp">
+
+        </Button>
+
+        <Button
+            android:layout_marginLeft="30dp"
+            android:id="@+id/rev_start"
+            android:text="接受声波"
+            android:layout_width="150dp"
+            android:layout_height="50dp">
+
+        </Button>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/rev_stop"
+            android:text="停止接收"
+            android:layout_width="150dp"
+            android:layout_height="50dp">
+
+        </Button>
+
+        <Button
+            android:layout_marginLeft="30dp"
+            android:id="@+id/calc_distance"
+            android:text="计算距离"
+            android:layout_width="150dp"
+            android:layout_height="50dp">
+
+        </Button>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/distance_txt"
+            android:layout_width="150dp"
+            android:text="距离为： xxxcm"
+            android:textSize="20sp"
+            android:layout_height="50dp">
+        </TextView>
+
+    </LinearLayout>
+
+
 </LinearLayout>
