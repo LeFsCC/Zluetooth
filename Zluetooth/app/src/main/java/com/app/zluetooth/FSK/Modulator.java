@@ -79,7 +79,7 @@ public class Modulator {
         int temp[] = new int[level];
         modulated = new ArrayList<Double>();
         for(int i = 0; i < 10000; i++) {
-            modulated.add(0.0);
+            modulated.add(0.002);
         }
 
         modulated.addAll(carriers.get(0).generate_sync());

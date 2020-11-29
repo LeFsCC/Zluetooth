@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -14,6 +15,8 @@ import androidx.core.content.ContextCompat;
 public class Permissions {
     private static String TAG = "Permission";
     private static final int REQUEST_WRITE_STORAGE = 112;
+    private static final int permission_req_code =  1000;
+
 //  记录权限/录音
     public static void requestRecordPermissions(final Context context, final Activity activity) {
         int permission = ContextCompat.checkSelfPermission(context,
@@ -85,5 +88,19 @@ public class Permissions {
         ActivityCompat.requestPermissions(activity,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 REQUEST_WRITE_STORAGE);
+    }
+
+    public static void askForPermission(Activity activity) {
+
+        ActivityCompat.requestPermissions(activity, new String[] {
+                Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.ACCESS_NETWORK_STATE
+        }, REQUEST_WRITE_STORAGE);
+    }
+
+    public static boolean defaultPermissionCheck(Context context) {
+        int external_storage_write = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
+        int a = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_WIFI_STATE);
+        int b = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE);
+        return external_storage_write == PackageManager.PERMISSION_GRANTED && a==PackageManager.PERMISSION_GRANTED && b==PackageManager.PERMISSION_GRANTED;
     }
 }

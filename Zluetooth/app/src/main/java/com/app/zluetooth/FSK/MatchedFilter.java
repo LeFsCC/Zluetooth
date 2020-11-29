@@ -62,12 +62,16 @@ public class MatchedFilter {
             fft.realForwardFull(signal_fft);
             chirp_fft = new double[modulated.size() * 2];
             System.arraycopy(chirp_signal_a, 0, chirp_fft, 0, chirp_signal_a.length);
+
             fft.realForwardFull(chirp_fft);
+
             filter_out = new double[signal_fft.length];
             for (int i = 0; i < signal_fft.length; i++) {
                 filter_out[i] = chirp_fft[i] * signal_fft[i];
             }
+
             fft.realInverseFull(filter_out, true);
+
             filter_out = abs(filter_out);
 
         } catch (Exception e) {
