@@ -35,6 +35,7 @@ public class Server extends Thread {
     Socket socket = null;
     Activity activity;
     Context context;
+    String timeStamp = "";
 
     public Server(int port, Activity activity, Context context) {
         this.activity = activity;
@@ -76,6 +77,7 @@ public class Server extends Thread {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        timeStamp = new String(buf, 0, finalLen, StandardCharsets.UTF_8);
                         Toast.makeText(context, "  客户端: （"
                                 + socket.getInetAddress().getHostAddress() + "）说："
                                 + new String(buf, 0, finalLen, StandardCharsets.UTF_8), Toast.LENGTH_SHORT).show();
@@ -86,6 +88,10 @@ public class Server extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getSTimeStamp() {
+        return timeStamp;
     }
 
     public void closeServer() {

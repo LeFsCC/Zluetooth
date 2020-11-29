@@ -62,10 +62,21 @@ public class Receiver {
         }
     }
 
+    public void getDistance() {
+        //todo 求出开始录音时第一个采样点的时间戳
+        // 找到同步码的位置在第一个采样点
+        // 求出同步码出现位置的时间戳，注意, start index 到底是同步码出现的最后一个采样点还是第一个采样点
+        // WiFi 包的时间戳和同步码时间戳相减求出距离
+    }
+
      // 使用阈值判断和梯度检测的方式判断同步码位置
-    public int locate_start() {
+    public int locate_start(int st) {
+        if(st >= modulated.size()) {
+            return -1;
+        }
+
         List<Double> sub_signal = new ArrayList<>();
-        sub_signal = modulated.subList(0, (int)(symbol_size * sample_rate));
+        sub_signal = modulated.subList(st, (int)(symbol_size * sample_rate));
         ArrayList<Double> temp_signal = new ArrayList<>(sub_signal);
 
         matched_filter = new MatchedFilter(duration, symbol_size, sample_rate,  temp_signal);
@@ -103,7 +114,7 @@ public class Receiver {
 
     public void recover_signal() {
 
-        int start_index = locate_start();
+        int start_index = locate_start(0);
         if(start_index == -1) {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             System.out.println("S I G N A L   R E C O V E R E D   F A I L E D, P L Z   T R Y   A G A I N.");

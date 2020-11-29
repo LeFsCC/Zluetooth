@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+
     private void initDisView() {
         server_ip_txt = findViewById(R.id.server_ip);
         server_port_txt = findViewById(R.id.server_port);
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        // 启动服务器
         open_server_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        // 启动客户端
         open_client_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         send_msg = findViewById(R.id.send_msg);
 
+        // 客户端向服务端发信息
         send_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        // 服务端获取ip和port
         try {
             String Server_IP = ApManager.getLocalIpAddress(getApplicationContext());
             server_ip_txt.setText(Server_IP);
