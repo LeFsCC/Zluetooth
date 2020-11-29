@@ -8,10 +8,12 @@
 
     <LinearLayout
         android:paddingTop="50dp"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints"
         android:gravity="center"
+
         android:orientation="horizontal">
 
         <Button
@@ -35,37 +37,40 @@
 
 
     <LinearLayout
-        android:layout_marginTop="90dp"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
+        android:layout_width="513dp"
+        android:layout_height="1193dp"
         android:gravity="center"
-        android:layout_height="match_parent">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
 
         <EditText
             android:id="@+id/raw_data_txt"
             android:layout_width="350dp"
             android:layout_height="190dp"
+            android:background="@drawable/textview_border"
             android:hint="在此处输入原始数据"
-            android:textAlignment="center"
-            android:background="@drawable/textview_border">
-
+            android:textAlignment="center">
         </EditText>
 
         <EditText
             android:id="@+id/decode_data_txt"
-            android:layout_marginTop="20dp"
             android:layout_width="350dp"
             android:layout_height="190dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/textview_border"
             android:hint="此处将显示解码数据"
-            android:textAlignment="center"
-            android:background="@drawable/textview_border">
+            android:textAlignment="center">
 
         </EditText>
 
         <LinearLayout
-            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -73,31 +78,31 @@
                 android:id="@+id/transmit_btn"
                 android:layout_width="120dp"
                 android:text="发出声波"
-                android:textSize="17sp"
                 android:textColor="#3E3838"
                 android:background="@drawable/button_style"
-                android:layout_height="40dp">
-
+                android:layout_height="40dp"
+                tools:ignore="ExtraText">
+                android:textSize="17sp">
             </Button>
 
             <Button
                 android:id="@+id/receive_btn"
-                android:layout_marginLeft="30dp"
                 android:layout_width="120dp"
-                android:text="接收声波"
-                android:textSize="17sp"
-                android:textColor="#3E3838"
+                android:layout_marginLeft="30dp"
                 android:background="@drawable/button_style"
+                android:text="接收声波"
+                android:textColor="#3E3838"
                 android:layout_height="40dp">
+                android:textSize="17sp">
 
             </Button>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -105,22 +110,22 @@
                 android:id="@+id/encode_btn"
                 android:layout_width="120dp"
                 android:text="编 码"
-                android:textSize="17sp"
                 android:textColor="#3E3838"
                 android:background="@drawable/button_style"
                 android:layout_height="40dp">
+                android:textSize="17sp">
 
             </Button>
 
             <Button
                 android:id="@+id/decode_btn"
-                android:layout_marginLeft="30dp"
                 android:layout_width="120dp"
+                android:layout_marginLeft="30dp"
                 android:text="接收停止"
-                android:textSize="17sp"
                 android:textColor="#3E3838"
                 android:background="@drawable/button_style"
                 android:layout_height="40dp">
+                android:textSize="17sp">
 
             </Button>
 
