@@ -8,18 +8,15 @@ import java.util.ArrayList;
 public class StringAndBinary {
     private String src;
     private int[] b;
-    private int bits;
     private static ArrayList<Integer> demodulated;
 
     public StringAndBinary(String src) {
         this.src = src;
-        this.bits = RigidData.number_of_carriers;
         generate();
     }
 
     public StringAndBinary(ArrayList<Integer> demodulated) {
         this.demodulated = demodulated;
-        this.bits = RigidData.number_of_carriers;
     }
 
     public void generate() {

@@ -114,10 +114,10 @@ public class Recorder {
     }
 
     private void copyWaveFile(String inFilename, String outFilename) {
-        FileInputStream in = null;
-        FileOutputStream out = null;
+        FileInputStream in;
+        FileOutputStream out;
         long totalAudioLen = 0;
-        long totalDataLen = totalAudioLen + 36;
+        long totalDataLen;
         long longSampleRate = RECORDER_SAMPLERATE;
         int channels = RECORDER_CHANNELS_INT;
         long byteRate = RECORDER_BPP * RECORDER_SAMPLERATE * channels / 8;
@@ -200,16 +200,6 @@ public class Recorder {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public double getVolume() {
-        double sum = 0;
-        for(double t : volume) {
-            sum += t;
-        }
-        int size = volume.size();
-        volume.clear();
-        return sum / size;
     }
 
     private void WriteWaveFileHeader(FileOutputStream out, long totalAudioLen,

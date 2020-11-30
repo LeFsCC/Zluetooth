@@ -3,7 +3,6 @@ package com.app.zluetooth.FSK;
 import com.app.zluetooth.Utils.RigidData;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Modulator {
 
@@ -29,7 +28,7 @@ public class Modulator {
         frequencies = new int[number_of_carriers];
         frequencies[0] = fs;
         for (int i = 1; i < number_of_carriers; i++) {
-            frequencies[i] = frequencies[i -1] + 625;
+            frequencies[i] = frequencies[i - 1] + 625;
         }
     }
 
@@ -49,11 +48,10 @@ public class Modulator {
         int[] temp = new int[level];
         modulated = new ArrayList<>();
         for(int i = 0; i < 10000; i++) {
-            modulated.add(0.002);
+            modulated.add(0.0);
         }
 
-        modulated.addAll(carriers.get(0).generate_sync());
-        System.out.println("data length " + data.length);
+        modulated.addAll(carriers.get(0).generate_chirp_sync());
         for (int i = 0; i < data.length - (level - 1); i += level) {
             temp[0] = data[i];
             temp[1] = data[i + 1];
@@ -76,7 +74,6 @@ public class Modulator {
         for(int t: temp) {
             ee.append(t);
         }
-        System.out.println(ee);
         return Integer.parseInt(ee.toString(), 2);
     }
 

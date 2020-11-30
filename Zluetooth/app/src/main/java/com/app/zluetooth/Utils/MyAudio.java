@@ -30,7 +30,7 @@ public class MyAudio {
         }
     }
 
-    public MyAudio(Double[] src, Context context, String filename) { //Overloaded Constructor For Writing
+    public MyAudio(Double[] src, Context context, String filename) {
         this.sample_rate = 44100;
         this.duration = src.length / sample_rate;
         this.n_frames = (long) (duration * sample_rate);

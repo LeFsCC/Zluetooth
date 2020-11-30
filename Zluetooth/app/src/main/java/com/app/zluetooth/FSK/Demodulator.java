@@ -13,7 +13,6 @@ public class Demodulator {
 
     private double sample_rate;
     private double symbol_size;
-    private double sample_period;
     private int number_of_carriers;
     private int[] frequencies;
     private int fs;
@@ -25,11 +24,10 @@ public class Demodulator {
     public Demodulator(double sample_rate, double symbol_size, ArrayList<Double> modulated) {
         this.sample_rate = sample_rate;
         this.symbol_size = symbol_size;
-        this.sample_period = 1 / sample_rate;
         this.number_of_carriers = RigidData.number_of_carriers;
         this.fs = RigidData.fs;
         this.modulated = modulated;
-        demodulated = new ArrayList<Integer>();
+        demodulated = new ArrayList<>();
         initFrequencies();
         initCarriers();
     }
@@ -43,7 +41,7 @@ public class Demodulator {
     }
 
     public void initCarriers() {
-        carriers = new ArrayList<SignalGenerator>();
+        carriers = new ArrayList<>();
         for (int i = 0; i < number_of_carriers; i++) {
             SignalGenerator s = new SignalGenerator(symbol_size, frequencies[i], 1.0 / 44100.0);
             s.generate();
@@ -53,8 +51,8 @@ public class Demodulator {
 
     public void demodulate() {
         try {
-            double temp[] = toArray();
-            ArrayList<Double> holder = new ArrayList<Double>();
+            double[] temp = toArray();
+            ArrayList<Double> holder = new ArrayList<>();
             for (int i = 0; i < modulated.size(); i += (int) (symbol_size * sample_rate)) {
 
                 double[] Symbol = Arrays.copyOfRange(temp, i, (int) (i + symbol_size * sample_rate));
@@ -77,7 +75,7 @@ public class Demodulator {
     }
 
     public ArrayList<Integer> getBits8(int n) {
-        ArrayList<Integer> bits = new ArrayList<Integer>();
+        ArrayList<Integer> bits = new ArrayList<>();
         if (n == 0) {
             bits.add(0);
             bits.add(0);
@@ -126,13 +124,9 @@ public class Demodulator {
             if (Carrier.size() != Symbol.length) {
                 return 0;
             }
-
             double sum = 0;
-
             for (int i = 0; i < Carrier.size() - 1; i++) {
-                double a = Carrier.get(i) * Symbol[i];
-                double b = Carrier.get(i + 1) * Symbol[i + 1];
-                sum += a + b;
+                sum += Carrier.get(i) * Symbol[i] + Carrier.get(i + 1) * Symbol[i + 1];
             }
             r = sum * 0.5;
         } catch (Exception e) {

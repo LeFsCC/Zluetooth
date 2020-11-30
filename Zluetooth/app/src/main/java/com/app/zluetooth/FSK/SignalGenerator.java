@@ -31,9 +31,8 @@ public class SignalGenerator {
 
         try {
             data = new ArrayList<>();
-            double rad = 0;
             for (int i = 0; i < symbol_size / step_size; i++) {
-                rad = (2 * Math.PI * f * i * step_size);
+                double rad = (2 * Math.PI * f * i * step_size);
                 data.add(Math.cos(rad));
             }
         } catch(Exception e){
@@ -42,12 +41,11 @@ public class SignalGenerator {
         return data;
     }
 
-    public ArrayList<Double> generate_sync() {
+    public ArrayList<Double> generate_chirp_sync() {
         sync = new ArrayList<>();
-        double rad;
         double k = ((RigidData.sync_fs - RigidData.fs) / symbol_size);
         for (int i = 0; i < symbol_size * sample_rate; i++) {
-            rad = (2 * Math.PI * ((k / 2) * i * step_size + RigidData.fs) * i * step_size);
+            double rad = (2 * Math.PI * ((k / 2) * i * step_size + RigidData.fs) * i * step_size);
             sync.add(Math.cos(rad));
         }
         return sync;

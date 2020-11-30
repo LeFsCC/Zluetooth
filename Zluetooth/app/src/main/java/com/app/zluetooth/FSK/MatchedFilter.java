@@ -11,7 +11,6 @@ import java.util.Collections;
 
 public class MatchedFilter {
 
-    private double duration;
     private double symbol_size;
     private double sample_rate;
     private double sample_period;
@@ -32,8 +31,7 @@ public class MatchedFilter {
 
     private SignalGenerator signal_generator;
 
-    public MatchedFilter(double duration, double symbol_size, double sample_rate, ArrayList<Double> modulated) {
-        this.duration = duration;
+    public MatchedFilter(double symbol_size, double sample_rate, ArrayList<Double> modulated) {
         this.symbol_size = symbol_size;
         this.sample_rate = sample_rate;
         this.sample_period = 1.0 / sample_rate;
@@ -45,7 +43,7 @@ public class MatchedFilter {
 
     public void getSync() {
         signal_generator = new SignalGenerator(symbol_size, RigidData.sync_fs, sample_period);
-        signal_generator.generate_sync();
+        signal_generator.generate_chirp_sync();
         chirp_signal = signal_generator.getSync();
         chirp_signal_a = toArray((chirp_signal));
         Collections.reverse(chirp_signal);

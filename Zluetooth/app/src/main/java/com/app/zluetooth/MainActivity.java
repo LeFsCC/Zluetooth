@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.zluetooth.FSK.Receiver;
-import com.app.zluetooth.FSK.Transmitter;
+import com.app.zluetooth.FSK.Encoder;
 import com.app.zluetooth.Utils.Permissions;
 import com.app.zluetooth.Utils.RigidData;
 import com.app.zluetooth.WiFiComm.ApManager;
@@ -29,15 +28,12 @@ import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Transmitter transmitter;
+    private Encoder encoder;
     private Receiver receiver;
     private String src;
     private double sample_rate;
     private double symbol_size;
-    private double sample_period;
-    private double duration;
 
-    private int number_of_carriers;
     private MediaPlayer mediaplayer;
 
     private String recovered_string;
@@ -47,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button transmit_btn;
     private Button receive_btn;
     private Button encode_btn;
-    private String modulation = "FSK";
     private TextView recovered_textView;
 
 
@@ -70,15 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        modulation = "FSK";
-
-        duration = 32;
         sample_rate = RigidData.sample_rate;
         symbol_size = RigidData.symbol_size;
-        sample_period = 1.0 / sample_rate;
-
-        number_of_carriers = RigidData.number_of_carriers;
         askPermission();
         initComView();
     }
@@ -114,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void initDisView() {
         server_ip_txt = findViewById(R.id.server_ip);
         server_port_txt = findViewById(R.id.server_port);
@@ -238,16 +227,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void generate() {
         System.gc();
-        transmitter = new Transmitter(src, symbol_size, getApplicationContext());
-        System.out.println("Writing WavFile");
-        transmitter.writeAudio();
-        System.out.println("WaveFile Written. Thread waiting");
+        encoder = new Encoder(src, symbol_size, getApplicationContext());
+        encoder.writeAudio();
     }
 
     public void record() {
         recovered_textView.setText("");
         Toast.makeText(this, "开始录音", Toast.LENGTH_SHORT).show();
-        receiver = new Receiver("recorded.wav", sample_rate, symbol_size, number_of_carriers, getApplicationContext());
+        receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
         receiver.record_start();
     }
 
@@ -263,28 +250,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.receive_btn: {
+            case R.id.receive_btn:
                 initReceive();
                 break;
-            }
-            case R.id.decode_btn:{
+            case R.id.decode_btn:
                 decode();
                 break;
-            }
-            case R.id.transmit_btn:{
+            case R.id.transmit_btn:
                 initTransmit();
                 break;
-            }
-            case R.id.encode_btn:{
+            case R.id.encode_btn:
                 src = mEdit.getText().toString();
-
-                while (src.length() < 5) {
-                    src += " ";
+                if(src.length() == 0) {
+                    Toast.makeText(this, "不能为空", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 generate();
                 Toast.makeText(this, "编码完成", Toast.LENGTH_SHORT).show();
                 break;
-            }
+            default:
+                break;
         }
     }
 }
