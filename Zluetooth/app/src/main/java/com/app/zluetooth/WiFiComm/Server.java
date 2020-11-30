@@ -90,7 +90,7 @@ public class Server extends Thread {
         }
     }
 
-    public String getSTimeStamp() {
+    public String getTimeStamp() {
         return timeStamp;
     }
 

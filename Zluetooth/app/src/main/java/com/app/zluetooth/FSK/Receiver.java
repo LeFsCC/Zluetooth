@@ -49,13 +49,6 @@ public class Receiver {
         }
     }
 
-    public void getDistance() {
-        //todo 求出开始录音时第一个采样点的时间戳
-        // 找到同步码的位置在第一个采样点
-        // 求出同步码出现位置的时间戳，注意, start index 到底是同步码出现的最后一个采样点还是第一个采样点
-        // WiFi 包的时间戳和同步码时间戳相减求出距离
-    }
-
      // 使用阈值判断和梯度检测的方式判断同步码位置
     public int locate_start(int st) {
         if(st >= modulated.size()) {
