@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button receive_btn;
     private Button encode_btn;
     private TextView recovered_textView;
+    private TextView distance_txt;
 
 
     private static String TAG = "Permission";
@@ -64,11 +65,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_dis);
         sample_rate = RigidData.sample_rate;
         symbol_size = RigidData.symbol_size;
         askPermission();
-        initComView();
+        initDisView();
     }
 
     private void askPermission() {
@@ -110,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         open_client_btn = findViewById(R.id.open_client);
         input_ip = findViewById(R.id.server_ip_in);
         input_port = findViewById(R.id.server_port_in);
+        distance_txt = findViewById(R.id.distance_txt);
+
 
         Button com_btn = findViewById(R.id.com_btn2);
 
@@ -247,9 +250,103 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recovered_textView.setText(recovered_string);
     }
 
+    public void server_start(){
+        rec_time1=0;
+        rec_time2=0;
+        receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                receiver.record_start();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //发声波
+                encoder = new Encoder(" ", symbol_size, getApplicationContext());
+                encoder.writeAudio();
+                initTransmit();
+                try {
+                    Thread.sleep(6000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                receiver.record_stop();
+                rec_time1=receiver.locate_start(0);
+                Log.e("服务端接受自己的时间点：", String.valueOf(rec_time1));
+                rec_time2=receiver.locate_start(rec_time1+1000);
+                Log.e("服务端接受客户端的时间点：", String.valueOf(rec_time2));
+
+            }
+        }).start();
+
+    }
+
+    int rec_time1=0;
+    int rec_time2=0;
+
+    public void client_start(){
+        receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                receiver.record_start();
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                receiver.record_stop();
+                rec_time1=receiver.locate_start(0);
+                Log.e("客户端接受服务端的时间点：", String.valueOf(rec_time1));
+                receiver.record_start();
+                //发声波
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                encoder = new Encoder(" ", symbol_size, getApplicationContext());
+                encoder.writeAudio();
+                initTransmit();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                receiver.record_stop();
+                rec_time2=receiver.locate_start(0);
+                Log.e("客户端接受自己的时间点：", String.valueOf(rec_time2));
+            }
+        }).start();
+    }
+
+    public void dis_stop_record(){
+        receiver.record_stop();
+    }
+
+    public void calcu_dis(){
+
+    }
+
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.transmit_dis_btn:
+                server_start();
+                break;
+            case R.id.rev_start:
+                client_start();
+                break;
+            case R.id.rev_stop:
+                dis_stop_record();
+                break;
+            case R.id.calc_distance:
+                calcu_dis();
+                break;
             case R.id.receive_btn:
                 initReceive();
                 break;
