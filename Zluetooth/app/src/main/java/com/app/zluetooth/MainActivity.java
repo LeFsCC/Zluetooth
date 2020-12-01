@@ -339,8 +339,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 rec_time2=receiver.locate_start(0);
                 B_3 = start_time + rec_time2;
                 Log.e("客户端接受自己的时间点：", String.valueOf(B_3));
+                try {
+                    client.sendMessage(String.valueOf(B_1)+';'+String.valueOf(B_3));
+                } catch (Exception e) {
+                    final String ip = input_ip.getText().toString();
+                    final String port = input_port.getText().toString();
+                    client = null;
+                    client = new Client(ip, Integer.parseInt(port), MainActivity.this, getApplicationContext());
+                    Toast.makeText(getApplicationContext(), "连接被重置, 请重新发送", Toast.LENGTH_SHORT).show();
+                }
             }
         }).start();
+
     }
 
     public void dis_stop_record(){
