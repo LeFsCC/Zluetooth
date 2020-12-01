@@ -57,7 +57,7 @@ public class Receiver {
 
         try{
             List<Double> sub_signal = new ArrayList<>();
-            sub_signal = modulated.subList(st, (int)(symbol_size * sample_rate));
+            sub_signal = modulated.subList(st, st + (int)(symbol_size * sample_rate));
             ArrayList<Double> temp_signal = new ArrayList<>(sub_signal);
 
             MatchedFilter matched_filter = new MatchedFilter(symbol_size, sample_rate, temp_signal);
@@ -71,7 +71,7 @@ public class Receiver {
                 start_index = (int) temp;
             }
 
-            int offset = 0;
+            int offset = st;
 
             while(offset + (int)(symbol_size * sample_rate) < modulated.size()) {
                 offset += symbol_size * sample_rate;

@@ -113,6 +113,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         input_port = findViewById(R.id.server_port_in);
         distance_txt = findViewById(R.id.distance_txt);
 
+        findViewById(R.id.transmit_dis_btn).setOnClickListener(this);
+        findViewById(R.id.rev_start).setOnClickListener(this);
+        findViewById(R.id.rev_stop).setOnClickListener(this);
+        findViewById(R.id.calc_distance).setOnClickListener(this);
+
+
 
         Button com_btn = findViewById(R.id.com_btn2);
 
@@ -275,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 receiver.record_stop();
                 rec_time1=receiver.locate_start(0);
                 Log.e("服务端接受自己的时间点：", String.valueOf(rec_time1));
-                rec_time2=receiver.locate_start(rec_time1+1000);
+                rec_time2=receiver.locate_start(rec_time1 + 5);
                 Log.e("服务端接受客户端的时间点：", String.valueOf(rec_time2));
 
             }
@@ -336,6 +342,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.transmit_dis_btn:
+                Toast.makeText(getApplicationContext(), "开始发射声波", Toast.LENGTH_SHORT).show();
                 server_start();
                 break;
             case R.id.rev_start:
