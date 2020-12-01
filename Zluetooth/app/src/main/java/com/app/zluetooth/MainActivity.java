@@ -256,6 +256,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recovered_textView.setText(recovered_string);
     }
 
+//      D=C/2((tA_3-tB_3)-(tA_1-tB_1))+dA,A+dB,B
+    double A_3 = 0;
+    double A_1 = 0;
+    double B_3 = 0;
+    double B_1 = 0;
+
     public void server_start(){
         rec_time1=0;
         rec_time2=0;
@@ -264,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 receiver.record_start();
+                double start_time = System.currentTimeMillis();
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -280,9 +287,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 receiver.record_stop();
                 rec_time1=receiver.locate_start(0);
-                Log.e("服务端接受自己的时间点：", String.valueOf(rec_time1));
+                A_1 = start_time + rec_time1/sample_rate*1000;
+                Log.e("服务端接受自己的时间点：", String.valueOf(A_1));
                 rec_time2=receiver.locate_start(rec_time1 + 5);
-                Log.e("服务端接受客户端的时间点：", String.valueOf(rec_time2));
+                A_3 = start_time + rec_time2/sample_rate*1000;
+                Log.e("服务端接受客户端的时间点：", String.valueOf(A_3));
 
             }
         }).start();
@@ -293,11 +302,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int rec_time2=0;
 
     public void client_start(){
+        rec_time1=0;
+        rec_time2=0;
         receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
         new Thread(new Runnable() {
             @Override
             public void run() {
                 receiver.record_start();
+                double start_time = System.currentTimeMillis();
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
@@ -305,8 +317,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 receiver.record_stop();
                 rec_time1=receiver.locate_start(0);
-                Log.e("客户端接受服务端的时间点：", String.valueOf(rec_time1));
+                B_1 = start_time + rec_time1/sample_rate*1000;
+                Log.e("客户端接受服务端的时间点：", String.valueOf(B_1));
                 receiver.record_start();
+                start_time = System.currentTimeMillis();
                 //发声波
                 try {
                     Thread.sleep(100);
@@ -323,7 +337,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 receiver.record_stop();
                 rec_time2=receiver.locate_start(0);
-                Log.e("客户端接受自己的时间点：", String.valueOf(rec_time2));
+                B_3 = start_time + rec_time2;
+                Log.e("客户端接受自己的时间点：", String.valueOf(B_3));
             }
         }).start();
     }
