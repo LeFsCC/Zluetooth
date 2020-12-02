@@ -78,6 +78,11 @@ public class Server extends Thread {
                     @Override
                     public void run() {
                         timeStamp = new String(buf, 0, finalLen, StandardCharsets.UTF_8);
+//                        double t=System.currentTimeMillis();
+//                        double t3 = Double.parseDouble(String.valueOf(t));
+//                        Log.e("t3 - t = ", String.valueOf(t3-t));
+//                        double t2 = Double.parseDouble(timeStamp);
+//                        Log.e("时间差: ", String.valueOf(t-t2));
                         Toast.makeText(context, "  客户端: （"
                                 + socket.getInetAddress().getHostAddress() + "）说："
                                 + new String(buf, 0, finalLen, StandardCharsets.UTF_8), Toast.LENGTH_SHORT).show();

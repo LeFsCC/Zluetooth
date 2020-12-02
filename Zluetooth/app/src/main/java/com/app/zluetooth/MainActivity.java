@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     double A_0 = 0;
     double A_3 = 0;
     double A_1 = 0;
-    double B_0 = 0;
+    double B_2 = 0;
     double B_3 = 0;
     double B_1 = 0;
 
@@ -271,7 +271,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 receiver.record_start();
                 double start_time = System.currentTimeMillis();
-                A_0 = start_time;
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -280,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //发声波
                 encoder = new Encoder(" ", symbol_size, getApplicationContext());
                 encoder.writeAudio();
+                A_0 = System.currentTimeMillis();
                 initTransmit();
                 try {
                     Thread.sleep(3000);
@@ -287,11 +287,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     e.printStackTrace();
                 }
                 receiver.record_stop();
-                rec_time1=receiver.locate_start(0);
+                rec_time1=receiver.locate_start(0)-10000;
                 A_1 = start_time - 200.0 + rec_time1 * 1000.0 / sample_rate;
                 Log.e("A_1", String.valueOf((rec_time1 * 1000.0 / sample_rate) - 200));
 
-                rec_time2=receiver.locate_start(rec_time1 + 10000);
+                rec_time2=receiver.locate_start(rec_time1 + 10000)-10000;
                 A_3 = start_time - 200.0 + rec_time2 * 1000.0 / sample_rate;
                 Log.e("A_3", String.valueOf((rec_time2 * 1000.0 / sample_rate) - 200));
                 try {
@@ -304,22 +304,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("stamp", timeStamp);
 
                 String[] str = timeStamp.split(";");
-                B_0 = Double.parseDouble(str[0]);
+                B_2 = Double.parseDouble(str[0]);
                 B_1 = Double.parseDouble(str[1]);
                 B_3 = Double.parseDouble(str[2]);
-                Log.e("B0", String.valueOf(B_0));
+                Log.e("B2", String.valueOf(B_2));
                 Log.e("B1", String.valueOf(B_1));
                 Log.e("B3", String.valueOf(B_3));
 
                 Log.e("B1 - A1", String.valueOf(B_1 - A_1));
                 Log.e("A3 - B3", String.valueOf(A_3 - B_3));
                 Log.e("A1 - A0", String.valueOf(A_1 - A_0));
-                Log.e("B1 - B0", String.valueOf(B_1 - B_0));
+                Log.e("B3 - B2", String.valueOf(B_3 - B_2));
 
                 Log.e("A3 - A1", String.valueOf(A_3 - A_1));
                 Log.e("B3 - B1", String.valueOf(B_3 - B_1));
 
-                double d = 0.17 * ((A_3 - A_1) - (B_3 - B_1));
+                double d = 0.17 * ((A_3 - A_1) - (B_3 - B_1))+0.34*(A_1-A_0)+0.34*(B_3-B_2);
                 Log.e("距离", String.valueOf(d));
             }
         }).start();
@@ -337,20 +337,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 receiver.record_start();
                 double start_time = System.currentTimeMillis();
-                B_0 = start_time;
                 try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 receiver.record_stop();
-                rec_time1=receiver.locate_start(0);
+                rec_time1=receiver.locate_start(0)-10000;
 
                 Log.e("B_1", String.valueOf((rec_time1 * 1000.0 / sample_rate) - 200.0));
                 B_1 = start_time - 200.0 + rec_time1 * 1000.0 / sample_rate;
 
                 receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
                 receiver.record_start();
+                start_time = System.currentTimeMillis();
 
                 //发声波
                 try {
@@ -360,19 +360,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 encoder = new Encoder(" ", symbol_size, getApplicationContext());
                 encoder.writeAudio();
+                B_2=System.currentTimeMillis();
                 initTransmit();
-                start_time = System.currentTimeMillis();
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 receiver.record_stop();
-                rec_time2 = receiver.locate_start(0);
-                Log.e("B_3", String.valueOf((rec_time2 * 1000.0 / sample_rate) - 200.0));
+                rec_time2 = receiver.locate_start(0)-10000;
                 B_3 = start_time - 200.0 + rec_time2 * 1000.0 / sample_rate;
                 Log.e("B_3", String.valueOf((rec_time2 * 1000.0 / sample_rate) - 200.0));
-                client.sendMessage(B_0 + ";" + B_1 + ";" + B_3);
+                client.sendMessage(B_2 + ";" + B_1 + ";" + B_3);
             }
         }).start();
     }
