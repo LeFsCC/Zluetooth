@@ -368,7 +368,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     e.printStackTrace();
                 }
                 receiver.record_stop();
-
                 rec_time2 = receiver.locate_start(0);
                 Log.e("B_3", String.valueOf((rec_time2 * 1000.0 / sample_rate) - 200.0));
                 B_3 = start_time - 200.0 + rec_time2 * 1000.0 / sample_rate;
