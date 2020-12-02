@@ -68,7 +68,7 @@ public class Receiver {
             if(res.size() != 0) {
                 last_max = res.get(0);
                 double temp = res.get(1);
-                start_index = (int) temp;
+                start_index = st + (int) temp;
             }
 
             int offset = st;
@@ -82,7 +82,7 @@ public class Receiver {
                 if(res.size() != 0) {
                     double cur_max = res.get(0);
                     double temp = res.get(1);
-                    if((last_max > 0.001 && (cur_max / last_max) >= 40) || cur_max > 10.0) {
+                    if((last_max > 0.001 && (cur_max / last_max) >= 40)) {
                         start_index = (int) temp;
                         break;
                     }

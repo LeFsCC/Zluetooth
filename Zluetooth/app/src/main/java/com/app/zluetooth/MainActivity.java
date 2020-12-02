@@ -282,19 +282,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 encoder.writeAudio();
                 initTransmit();
                 try {
-                    Thread.sleep(4000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 receiver.record_stop();
                 rec_time1=receiver.locate_start(0);
-                A_1 = start_time + rec_time1 * 1000.0 / sample_rate;
-                Log.e("服务端接受自己的时间点：", String.valueOf(A_1));
-                rec_time2=receiver.locate_start(rec_time1 + 5);
-                A_3 = start_time + rec_time2 * 1000.0 / sample_rate;
-                Log.e("服务端接受客户端的时间点：", String.valueOf(A_3));
+                A_1 = start_time - 200.0 + rec_time1 * 1000.0 / sample_rate;
+                Log.e("A_1", String.valueOf((rec_time1 * 1000.0 / sample_rate) - 200));
+
+                rec_time2=receiver.locate_start(rec_time1 + 10000);
+                A_3 = start_time - 200.0 + rec_time2 * 1000.0 / sample_rate;
+                Log.e("A_3", String.valueOf((rec_time2 * 1000.0 / sample_rate) - 200));
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -314,7 +315,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("A3 - B3", String.valueOf(A_3 - B_3));
                 Log.e("A1 - A0", String.valueOf(A_1 - A_0));
                 Log.e("B1 - B0", String.valueOf(B_1 - B_0));
-                double d = 0.17 * ((A_3 - A_1) - (B_3 - B_1)) + 0.34 * (A_1 - A_0) + 0.34 * (B_1 - B_0);
+
+                Log.e("A3 - A1", String.valueOf(A_3 - A_1));
+                Log.e("B3 - B1", String.valueOf(B_3 - B_1));
+
+                double d = 0.17 * ((A_3 - A_1) - (B_3 - B_1));
                 Log.e("距离", String.valueOf(d));
             }
         }).start();
@@ -334,16 +339,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 double start_time = System.currentTimeMillis();
                 B_0 = start_time;
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 receiver.record_stop();
                 rec_time1=receiver.locate_start(0);
-                B_1 = start_time + rec_time1 * 1000.0 / sample_rate;
 
-                Log.e("客户端接受服务端的时间点：", String.valueOf(B_1));
+                Log.e("B_1", String.valueOf((rec_time1 * 1000.0 / sample_rate) - 200.0));
+                B_1 = start_time - 200.0 + rec_time1 * 1000.0 / sample_rate;
+
+                receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
                 receiver.record_start();
+
                 //发声波
                 try {
                     Thread.sleep(100);
@@ -361,9 +369,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 receiver.record_stop();
 
-                rec_time2=receiver.locate_start(0);
-                B_3 = start_time + rec_time2 * 1000.0 /sample_rate;
-                Log.e("客户端接受自己的时间点：", String.valueOf(B_3));
+                rec_time2 = receiver.locate_start(0);
+                Log.e("B_3", String.valueOf((rec_time2 * 1000.0 / sample_rate) - 200.0));
+                B_3 = start_time - 200.0 + rec_time2 * 1000.0 / sample_rate;
+                Log.e("B_3", String.valueOf((rec_time2 * 1000.0 / sample_rate) - 200.0));
                 client.sendMessage(B_0 + ";" + B_1 + ";" + B_3);
             }
         }).start();

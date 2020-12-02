@@ -79,6 +79,7 @@ public class MatchedFilter {
             start_index = maxIndex(filter_out, max) +(int) (symbol_size*sample_rate);
             res.add(max);
             res.add((double)start_index);
+            System.out.println("max value" + max);
             return res;
         } catch (Exception e) {
             return res;
