@@ -311,13 +311,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("B1", String.valueOf(B_1));
                 Log.e("B3", String.valueOf(B_3));
 
-                Log.e("B1 - A1", String.valueOf(B_1 - A_1));
-                Log.e("A3 - B3", String.valueOf(A_3 - B_3));
-                Log.e("A1 - A0", String.valueOf(A_1 - A_0));
-                Log.e("B3 - B2", String.valueOf(B_3 - B_2));
+//                Log.e("B1 - A1", String.valueOf(B_1 - A_1));
+//                Log.e("A3 - B3", String.valueOf(A_3 - B_3));
+//                Log.e("A1 - A0", String.valueOf(A_1 - A_0));
+//                Log.e("B3 - B2", String.valueOf(B_3 - B_2));
 
                 Log.e("A3 - A1", String.valueOf(A_3 - A_1));
                 Log.e("B3 - B1", String.valueOf(B_3 - B_1));
+                Log.e("A3 - B2", String.valueOf(A_3 - B_2));
+                Log.e("B1 - A0", String.valueOf(B_1 - A_0));
 
                 double d = 0.17 * ((A_3 - A_1) - (B_3 - B_1))+0.3;
                 Log.e("距离", String.valueOf(d));
