@@ -73,6 +73,7 @@ public class Receiver {
 
             int offset = st;
 
+
             while(offset + (int)(symbol_size * sample_rate) < modulated.size()) {
                 offset += symbol_size * sample_rate;
                 sub_signal = modulated.subList(offset, (int)(offset + symbol_size * sample_rate));
@@ -84,13 +85,26 @@ public class Receiver {
                     double temp = res.get(1);
                     if((last_max > 0.001 && (cur_max / last_max) >= 40)) {
                         start_index = (int) temp;
-                        break;
+
+                        int offset2 = offset + (int)(symbol_size * sample_rate);
+                        sub_signal = modulated.subList(offset2, (int)(offset2 + symbol_size * sample_rate));
+                        temp_signal = new ArrayList<>(sub_signal);
+                        matched_filter = new MatchedFilter(symbol_size, sample_rate, temp_signal);
+                        res = matched_filter.get_start_index();
+                        double cur_max2 = res.get(0);
+                        double temp_2 = res.get(1);
+
+                        if(cur_max2 > cur_max) {
+                            return (int) (temp_2 + offset2);
+                        } else {
+                            return start_index + offset;
+                        }
                     }
                     last_max = cur_max;
                 }
                 matched_filter = null; // System.gc(); 内存垃圾回收
             }
-            return start_index + offset;
+            return -1;
         } catch (Exception e) {
             return -1;
         }
