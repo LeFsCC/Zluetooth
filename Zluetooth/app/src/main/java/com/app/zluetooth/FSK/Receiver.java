@@ -83,9 +83,9 @@ public class Receiver {
                 if(res.size() != 0) {
                     double cur_max = res.get(0);
                     double temp = res.get(1);
-                    if((last_max > 0.001 && (cur_max / last_max) >= 40)) {
+                    if((last_max > 0.001 && (cur_max / last_max) >= 20)) {
                         start_index = (int) temp;
-
+                        // 滑窗再次滑动, 找到真正的最大值
                         int offset2 = offset + (int)(symbol_size * sample_rate);
                         sub_signal = modulated.subList(offset2, (int)(offset2 + symbol_size * sample_rate));
                         temp_signal = new ArrayList<>(sub_signal);

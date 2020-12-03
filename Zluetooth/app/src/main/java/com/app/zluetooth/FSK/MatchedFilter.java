@@ -1,6 +1,10 @@
 package com.app.zluetooth.FSK;
 
 
+import android.widget.MultiAutoCompleteTextView;
+
+import androidx.annotation.ArrayRes;
+
 import com.app.zluetooth.Utils.RigidData;
 
 import org.jtransforms.fft.DoubleFFT_1D;
@@ -49,6 +53,26 @@ public class MatchedFilter {
         Collections.reverse(chirp_signal);
     }
 
+    public void matchSignal_3() {
+        filter_out = new double[modulated.size()];
+        for (int i = 0; i <  modulated.size(); i++) {
+            filter_out[i] = modulated.get(i);
+        }
+        filter_out = abs(filter_out);
+    }
+
+    public void matchSignal_2() {
+        try {
+            filter_out = new double[modulated.size()];
+            for (int i = 0; i <  modulated.size(); i++) {
+                filter_out[i] = chirp_signal.get(i) * modulated.get(i);
+            }
+            filter_out = abs(filter_out);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public void matchSignal() {
         try {
             fft = new DoubleFFT_1D(modulated.size());
@@ -76,7 +100,7 @@ public class MatchedFilter {
             System.arraycopy(filter_out, 0, sorted, 0, filter_out.length);
             Arrays.sort(sorted);
             double max = sorted[sorted.length - 1];
-            start_index = maxIndex(filter_out, max) +(int) (symbol_size*sample_rate);
+            start_index = maxIndex(filter_out, max) + (int) (symbol_size*sample_rate);
             res.add(max);
             res.add((double)start_index);
             System.out.println("max value" + max);

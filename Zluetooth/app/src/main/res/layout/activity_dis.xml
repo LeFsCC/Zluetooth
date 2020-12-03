@@ -16,6 +16,8 @@
         android:orientation="horizontal">
 
         <Button
+            android:background="@drawable/btn_selector"
+            android:textColor="#FFFEFF"
             android:id="@+id/dis_btn2"
             android:layout_width="150dp"
             android:text="测距"
@@ -24,6 +26,8 @@
         </Button>
 
         <Button
+            android:background="@drawable/btn_selector"
+            android:textColor="#FFFEFF"
             android:layout_marginLeft="30dp"
             android:id="@+id/com_btn2"
             android:layout_width="150dp"
@@ -71,6 +75,8 @@
         android:orientation="horizontal">
 
         <Button
+            android:background="@drawable/btn_selector"
+            android:textColor="#FFFEFF"
             android:id="@+id/open_server"
             android:text="打开服务器"
             android:layout_width="150dp"
@@ -93,6 +99,7 @@
             android:layout_width="200dp"
             android:background="@drawable/textview_border"
             android:hint="ip"
+            android:text="192.168.43.30"
             android:textAlignment="center"
             android:layout_height="60dp">
         </EditText>
@@ -102,6 +109,7 @@
             android:id="@+id/server_port_in"
             android:background="@drawable/textview_border"
             android:hint="port"
+            android:text="8185"
             android:textAlignment="center"
             android:layout_width="100dp"
             android:layout_height="60dp">
@@ -110,7 +118,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -118,6 +126,8 @@
         android:orientation="horizontal">
 
         <Button
+            android:background="@drawable/btn_selector"
+            android:textColor="#FFFEFF"
             android:id="@+id/open_client"
             android:text="打开客户端"
             android:layout_width="150dp"
@@ -126,6 +136,8 @@
         </Button>
 
         <Button
+            android:background="@drawable/btn_selector"
+            android:textColor="#FFFEFF"
             android:layout_marginLeft="30dp"
             android:id="@+id/send_msg"
             android:text="发送消息"
@@ -145,6 +157,8 @@
         android:orientation="horizontal">
 
         <Button
+            android:background="@drawable/btn_selector"
+            android:textColor="#FFFEFF"
             android:id="@+id/transmit_dis_btn"
             android:text="发射声波"
             android:layout_width="150dp"
@@ -153,6 +167,8 @@
         </Button>
 
         <Button
+            android:background="@drawable/btn_selector"
+            android:textColor="#FFFEFF"
             android:layout_marginLeft="30dp"
             android:id="@+id/rev_start"
             android:text="接受声波"
@@ -164,34 +180,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/rev_stop"
-            android:text="停止接收"
-            android:layout_width="150dp"
-            android:layout_height="50dp">
-
-        </Button>
-
-        <Button
-            android:layout_marginLeft="30dp"
-            android:id="@+id/calc_distance"
-            android:text="计算距离"
-            android:layout_width="150dp"
-            android:layout_height="50dp">
-
-        </Button>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="70dp"
         android:layout_marginLeft="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -200,9 +189,9 @@
 
         <TextView
             android:id="@+id/distance_txt"
-            android:layout_width="150dp"
-            android:text="距离为： xxxcm"
-            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:text="0 cm"
+            android:textSize="40sp"
             android:layout_height="50dp">
         </TextView>
 

@@ -20,9 +20,13 @@ public class Encoder {
     public Encoder(String src, double symbol_size, Context context) {
         Encoder.symbol_size = symbol_size;
         Encoder.context = context;
-        StringAndBinary stringToBinary = new StringAndBinary(src);
-        data = new int [stringToBinary.getB().length];
-        data = stringToBinary.getB();
+        try {
+            StringAndBinary stringToBinary = new StringAndBinary(src);
+            data = new int [stringToBinary.getB().length];
+            data = stringToBinary.getB();
+        } catch (Exception ignored){
+
+        }
         initModulator();
     }
 

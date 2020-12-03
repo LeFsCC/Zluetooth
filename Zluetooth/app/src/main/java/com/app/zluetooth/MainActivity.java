@@ -25,6 +25,7 @@ import com.app.zluetooth.WiFiComm.Server;
 
 import java.io.File;
 import java.net.UnknownHostException;
+import java.nio.charset.MalformedInputException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -115,8 +116,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.transmit_dis_btn).setOnClickListener(this);
         findViewById(R.id.rev_start).setOnClickListener(this);
-        findViewById(R.id.rev_stop).setOnClickListener(this);
-        findViewById(R.id.calc_distance).setOnClickListener(this);
 
         Button com_btn = findViewById(R.id.com_btn2);
 
@@ -263,37 +262,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     double B_1 = 0;
 
     public void server_start(){
-        rec_time1=0;
-        rec_time2=0;
+        rec_time1 = 0;
+        rec_time2 = 0;
         receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
         new Thread(new Runnable() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 receiver.record_start();
                 double start_time = System.currentTimeMillis();
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                //发声波
-                encoder = new Encoder(" ", symbol_size, getApplicationContext());
+
+                encoder = new Encoder("", symbol_size, getApplicationContext());
                 encoder.writeAudio();
                 A_0 = System.currentTimeMillis();
                 initTransmit();
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(4000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 receiver.record_stop();
-                rec_time1=receiver.locate_start(0)-10000;
-                A_1 = start_time - 200.0 + rec_time1 * 1000.0 / sample_rate;
-                Log.e("A_1", String.valueOf((rec_time1 * 1000.0 / sample_rate) - 200));
+                rec_time1=receiver.locate_start(0);
+                A_1 = start_time + rec_time1 * 1000.0 / sample_rate;
 
-                rec_time2=receiver.locate_start(rec_time1 + 10000)-10000;
-                A_3 = start_time - 200.0 + rec_time2 * 1000.0 / sample_rate;
-                Log.e("A_3", String.valueOf((rec_time2 * 1000.0 / sample_rate) - 200));
+                Log.e("A_1", String.valueOf((rec_time1 * 1000.0 / sample_rate)));
+
+                rec_time2=receiver.locate_start(rec_time1 + 1000);
+                A_3 = start_time + rec_time2 * 1000.0 / sample_rate;
+
+                Log.e("A_3", String.valueOf((rec_time2 * 1000.0 / sample_rate)));
+
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -307,22 +310,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 B_2 = Double.parseDouble(str[0]);
                 B_1 = Double.parseDouble(str[1]);
                 B_3 = Double.parseDouble(str[2]);
-                Log.e("B2", String.valueOf(B_2));
-                Log.e("B1", String.valueOf(B_1));
-                Log.e("B3", String.valueOf(B_3));
-
-//                Log.e("B1 - A1", String.valueOf(B_1 - A_1));
-//                Log.e("A3 - B3", String.valueOf(A_3 - B_3));
-//                Log.e("A1 - A0", String.valueOf(A_1 - A_0));
-//                Log.e("B3 - B2", String.valueOf(B_3 - B_2));
 
                 Log.e("A3 - A1", String.valueOf(A_3 - A_1));
                 Log.e("B3 - B1", String.valueOf(B_3 - B_1));
-                Log.e("A3 - B2", String.valueOf(A_3 - B_2));
-                Log.e("B1 - A0", String.valueOf(B_1 - A_0));
 
-                double d = 0.17 * ((A_3 - A_1) - (B_3 - B_1))+0.3;
-                Log.e("距离", String.valueOf(d));
+                final double d = 0.17 * ((A_3 - A_1) - (B_3 - B_1)) + 0.3;
+
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TextView distance_txt = findViewById(R.id.distance_txt);
+                        distance_txt.setText((int)(Math.abs(d * 100)) + "cm");
+                    }
+                });
+                Log.e("距离", String.valueOf(Math.abs(d * 100)));
             }
         }).start();
     }
@@ -340,53 +341,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 receiver.record_start();
                 double start_time = System.currentTimeMillis();
                 try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                //发声波
+                encoder = new Encoder("", symbol_size, getApplicationContext());
+                encoder.writeAudio();
+                B_2 = System.currentTimeMillis();
+                initTransmit();
+
+                try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-//                receiver.record_stop();
 
-
-//                receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
-//                receiver.record_start();
-//                start_time = System.currentTimeMillis();
-
-                //发声波
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                encoder = new Encoder(" ", symbol_size, getApplicationContext());
-                encoder.writeAudio();
-                B_2=System.currentTimeMillis();
-                initTransmit();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 receiver.record_stop();
-                rec_time1=receiver.locate_start(0)-10000;
-                Log.e("B_1", String.valueOf((rec_time1 * 1000.0 / sample_rate) - 200.0));
-                B_1 = start_time - 200.0 + rec_time1 * 1000.0 / sample_rate;
-                rec_time2 = receiver.locate_start(rec_time1+10000)-10000;
-                B_3 = start_time - 200.0 + rec_time2 * 1000.0 / sample_rate;
-                Log.e("B_3", String.valueOf((rec_time2 * 1000.0 / sample_rate) - 200.0));
+                rec_time1=receiver.locate_start(0);
+                B_1 = start_time  + rec_time1 * 1000.0 / sample_rate;
+                rec_time2 = receiver.locate_start(rec_time1 + 1000);
+                B_3 = start_time + rec_time2 * 1000.0 / sample_rate;
+
+                Log.e("B_1", String.valueOf(rec_time1 * 1000.0 / sample_rate));
+                Log.e("B_3", String.valueOf(rec_time2 * 1000.0 / sample_rate));
+
                 client.sendMessage(B_2 + ";" + B_1 + ";" + B_3);
             }
         }).start();
     }
-
-    public void dis_stop_record(){
-        receiver.record_stop();
-    }
-
-    public void calcu_dis(){
-
-    }
-
-
 
     @Override
     public void onClick(View v) {
@@ -397,12 +381,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.rev_start:
                 client_start();
-                break;
-            case R.id.rev_stop:
-                dis_stop_record();
-                break;
-            case R.id.calc_distance:
-                calcu_dis();
                 break;
             case R.id.receive_btn:
                 initReceive();
@@ -415,10 +393,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.encode_btn:
                 src = mEdit.getText().toString();
-                if(src.length() == 0) {
-                    Toast.makeText(this, "不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 generate();
                 Toast.makeText(this, "编码完成", Toast.LENGTH_SHORT).show();
                 break;
