@@ -1,5 +1,7 @@
 package com.app.zluetooth.FSK;
 
+import android.renderscript.ScriptIntrinsicYuvToRGB;
+
 import com.app.zluetooth.Utils.RigidData;
 
 import java.util.ArrayList;
@@ -15,13 +17,16 @@ public class Modulator {
     private static ArrayList<SignalGenerator> carriers;
 
 
-    public Modulator(int[] data, double symbol_size) {
-        Modulator.data = data;
+    public Modulator(double symbol_size) {
         Modulator.symbol_size = symbol_size;
         Modulator.number_of_carriers = RigidData.number_of_carriers;
         fs = RigidData.fs;
         initFrequencies();
         initCarriers();
+    }
+
+    public void setData(int[] data) {
+        Modulator.data = data;
     }
 
     public void initFrequencies() {
@@ -47,6 +52,8 @@ public class Modulator {
 
         int[] temp = new int[level];
         modulated = new ArrayList<>();
+
+        // 前面加白
         for(int i = 0; i < 10000; i++) {
             modulated.add(0.0);
         }
@@ -62,6 +69,11 @@ public class Modulator {
             if(level == 3) {
                 map8(temp);
             }
+        }
+
+        // 后面加白, 为了和下一个数据包分开
+        for(int i = 0; i < 10000; i++) {
+            modulated.add(0.0);
         }
     }
 

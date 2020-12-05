@@ -1,14 +1,12 @@
 package com.app.zluetooth;
-
-import android.content.Context;
-
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.app.zluetooth.Utils.DataPacket;
+import com.app.zluetooth.Utils.RigidData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import java.util.ArrayList;
 
-import static org.junit.Assert.*;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -19,8 +17,23 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.app.zluetooth", appContext.getPackageName());
+        String src = "";
+        ArrayList<DataPacket> dataPackets = new ArrayList<>();
+        int start_index = 0;
+        while(src.length() - start_index > RigidData.number_of_letter_each_packet){
+            DataPacket dataPacket = new DataPacket();
+            dataPacket.setData(src.substring(start_index, RigidData.number_of_letter_each_packet));
+            start_index += RigidData.number_of_letter_each_packet;
+        }
+
+        start_index -= RigidData.number_of_letter_each_packet;
+        if(start_index != src.length()) {
+            DataPacket dataPacket = new DataPacket();
+            dataPacket.setData(src.substring(start_index, src.length() - start_index));
+        }
+
+        for(int i = 0; i < dataPackets.size(); i++) {
+            System.out.println(dataPackets.get(i).getData());
+        }
     }
 }

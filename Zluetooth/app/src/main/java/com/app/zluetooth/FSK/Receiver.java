@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.app.zluetooth.Utils.MyAudio;
 import com.app.zluetooth.Utils.Recorder;
+import com.app.zluetooth.Utils.RigidData;
 import com.app.zluetooth.Utils.StringAndBinary;
 
 import java.util.ArrayList;
@@ -15,10 +16,10 @@ public class Receiver {
 
     private double sample_rate;
     private double symbol_size;
-    private ArrayList<Double> modulated;
+    private ArrayList<Double> modulated = new ArrayList<>();
     private ArrayList<Integer> demodulated;
     private Demodulator fsk_demodulator;
-    private ArrayList<Double> recovered_signal;
+    private ArrayList<Double> recovered_signal = new ArrayList<>();
     private String recovered_string;
     private Context context;
     private Recorder r;
@@ -55,7 +56,7 @@ public class Receiver {
             return -1;
         }
 
-        try{
+        try {
             List<Double> sub_signal = new ArrayList<>();
             sub_signal = modulated.subList(st, st + (int)(symbol_size * sample_rate));
             ArrayList<Double> temp_signal = new ArrayList<>(sub_signal);
@@ -67,12 +68,9 @@ public class Receiver {
             double last_max = 1;
             if(res.size() != 0) {
                 last_max = res.get(0);
-                double temp = res.get(1);
-                start_index = st + (int) temp;
             }
 
             int offset = st;
-
 
             while(offset + (int)(symbol_size * sample_rate) < modulated.size()) {
                 offset += symbol_size * sample_rate;
@@ -105,7 +103,6 @@ public class Receiver {
                     }
                     last_max = cur_max;
                 }
-                matched_filter = null; // System.gc(); 内存垃圾回收
             }
             return -1;
         } catch (Exception e) {
@@ -113,31 +110,31 @@ public class Receiver {
         }
     }
 
-    public void recover_signal() {
-
+    public void recover_data_packet() {
+        recovered_string = "";
         int start_index = locate_start(0);
-        if(start_index == -1) {
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            System.out.println("S I G N A L   R E C O V E R E D   F A I L E D, P L Z   T R Y   A G A I N.");
-            return;
-        }
 
-        recovered_signal = new ArrayList<Double>();
-        System.out.println("Start index is at " + start_index);
-        System.out.println("Size of signal is" + modulated.size());
+        while(start_index < modulated.size()) {
+            recover_signal(start_index, Math.min(start_index + 8 * RigidData.number_of_letter_each_packet * (int) (symbol_size * sample_rate) / 3, modulated.size()));
+            start_index += 8 * RigidData.number_of_letter_each_packet * (int)(symbol_size * sample_rate) / 3;
+            start_index = locate_start(start_index + 100);
+            if(start_index == -1) return;
+        }
+    }
+
+    private void recover_signal(int start_index, int end_index) {
+        if(start_index == -1) return;
+        recovered_signal.clear();
         System.out.println("Recovered String");
         System.out.println("----------------------------------------------------------------");
-
-        recovered_signal.addAll(modulated.subList(start_index, modulated.size()));
+        recovered_signal.addAll(modulated.subList(start_index, end_index));
         fsk_demodulator = new Demodulator(sample_rate, symbol_size, recovered_signal);
         String res = demodulate();
         System.out.println(res);
-        fsk_demodulator = null;
-        modulated = null;
         System.gc();
     }
 
-    public String demodulate() {
+    private String demodulate() {
         if(recovered_signal.get(0) == -1.0) {
             recovered_string = "-1";
             return "no signal";
@@ -145,13 +142,12 @@ public class Receiver {
 
         fsk_demodulator.demodulate();
         demodulated = fsk_demodulator.getDemodulated();
-        printBitStream();
         StringAndBinary string_handler = new StringAndBinary(demodulated);
-        recovered_string = string_handler.getString();
+        recovered_string = recovered_string.concat(string_handler.getString());
         return recovered_string;
     }
 
-    public void printBitStream() {
+    private void printBitStream() {
         for (int i = 0; i < demodulated.size(); i++) {
             System.out.print(demodulated.get(i));
         }

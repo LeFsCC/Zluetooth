@@ -247,13 +247,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void decode() {
         Toast.makeText(this, "录音结束", Toast.LENGTH_SHORT).show();
         receiver.record_stop();
-        receiver.recover_signal();
+        receiver.recover_data_packet();
         recovered_string = "";
         recovered_string = receiver.getRecoverd_string();
         recovered_textView.setText(recovered_string);
     }
 
-//      D=C/2((tA_3-tB_3)-(tA_1-tB_1))+dA,A+dB,B
     double A_0 = 0;
     double A_3 = 0;
     double A_1 = 0;
@@ -264,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void server_start(){
         rec_time1 = 0;
         rec_time2 = 0;
-        receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
+        receiver = new Receiver("recorded.wav", RigidData.sample_rate, RigidData.dis_symbol_size, getApplicationContext());
         new Thread(new Runnable() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -277,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     e.printStackTrace();
                 }
 
-                encoder = new Encoder("", symbol_size, getApplicationContext());
+                encoder = new Encoder("", RigidData.dis_symbol_size, getApplicationContext());
                 encoder.writeAudio();
                 A_0 = System.currentTimeMillis();
                 initTransmit();
@@ -288,14 +287,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 receiver.record_stop();
                 rec_time1=receiver.locate_start(0);
-                A_1 = start_time + rec_time1 * 1000.0 / sample_rate;
+                A_1 = start_time + rec_time1 * 1000.0 / RigidData.sample_rate;
 
-                Log.e("A_1", String.valueOf((rec_time1 * 1000.0 / sample_rate)));
+                Log.e("A_1", String.valueOf((rec_time1 * 1000.0 / RigidData.sample_rate)));
 
                 rec_time2=receiver.locate_start(rec_time1 + 1000);
-                A_3 = start_time + rec_time2 * 1000.0 / sample_rate;
+                A_3 = start_time + rec_time2 * 1000.0 / RigidData.sample_rate;
 
-                Log.e("A_3", String.valueOf((rec_time2 * 1000.0 / sample_rate)));
+                Log.e("A_3", String.valueOf((rec_time2 * 1000.0 / RigidData.sample_rate)));
 
                 try {
                     Thread.sleep(500);
@@ -334,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void client_start(){
         rec_time1=0;
         rec_time2=0;
-        receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
+        receiver = new Receiver("recorded.wav", RigidData.sample_rate, RigidData.dis_symbol_size, getApplicationContext());
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -347,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 //发声波
-                encoder = new Encoder("", symbol_size, getApplicationContext());
+                encoder = new Encoder("", RigidData.dis_symbol_size, getApplicationContext());
                 encoder.writeAudio();
                 B_2 = System.currentTimeMillis();
                 initTransmit();
@@ -360,12 +359,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 receiver.record_stop();
                 rec_time1=receiver.locate_start(0);
-                B_1 = start_time  + rec_time1 * 1000.0 / sample_rate;
+                B_1 = start_time  + rec_time1 * 1000.0 / RigidData.sample_rate;
                 rec_time2 = receiver.locate_start(rec_time1 + 1000);
-                B_3 = start_time + rec_time2 * 1000.0 / sample_rate;
+                B_3 = start_time + rec_time2 * 1000.0 / RigidData.sample_rate;
 
-                Log.e("B_1", String.valueOf(rec_time1 * 1000.0 / sample_rate));
-                Log.e("B_3", String.valueOf(rec_time2 * 1000.0 / sample_rate));
+                Log.e("B_1", String.valueOf(rec_time1 * 1000.0 / RigidData.sample_rate));
+                Log.e("B_3", String.valueOf(rec_time2 * 1000.0 / RigidData.sample_rate));
 
                 client.sendMessage(B_2 + ";" + B_1 + ";" + B_3);
             }
