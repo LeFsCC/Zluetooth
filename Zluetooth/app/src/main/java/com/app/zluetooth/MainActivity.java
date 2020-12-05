@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 receiver.record_start();
                 double start_time = System.currentTimeMillis();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 A_0 = System.currentTimeMillis();
                 initTransmit();
                 try {
-                    Thread.sleep(4000);
+                    Thread.sleep(6000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("A3 - A1", String.valueOf(A_3 - A_1));
                 Log.e("B3 - B1", String.valueOf(B_3 - B_1));
 
-                final double d = 0.17 * ((A_3 - A_1) - (B_3 - B_1)) + 0.3;
+                final double d = 0.17 * ((A_3 - A_1) - (B_3 - B_1)) ;
 
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -341,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 receiver.record_start();
                 double start_time = System.currentTimeMillis();
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(4000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -353,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 initTransmit();
 
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

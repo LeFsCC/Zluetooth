@@ -83,7 +83,7 @@ public class Receiver {
                 if(res.size() != 0) {
                     double cur_max = res.get(0);
                     double temp = res.get(1);
-                    if((last_max > 0.001 && (cur_max / last_max) >= 20)) {
+                    if((last_max > 0.001 && (cur_max / last_max) >= 40)) {
                         start_index = (int) temp;
                         // 滑窗再次滑动, 找到真正的最大值
                         int offset2 = offset + (int)(symbol_size * sample_rate);
@@ -93,7 +93,10 @@ public class Receiver {
                         res = matched_filter.get_start_index();
                         double cur_max2 = res.get(0);
                         double temp_2 = res.get(1);
-
+                        double tmp1 = cur_max/cur_max2;
+                        if(tmp1<1.15 && tmp1>0.87){
+                            return (int)(temp_2 + offset2+start_index + offset)/2;
+                        }
                         if(cur_max2 > cur_max) {
                             return (int) (temp_2 + offset2);
                         } else {
