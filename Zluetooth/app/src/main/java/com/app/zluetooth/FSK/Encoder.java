@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.app.zluetooth.Utils.DataPacket;
-import com.app.zluetooth.Utils.MyAudio;
+import com.app.zluetooth.Utils.AudioHandler;
 import com.app.zluetooth.Utils.RigidData;
 import com.app.zluetooth.Utils.StringAndBinary;
 
@@ -74,7 +74,7 @@ public class Encoder {
         for (int i = 0; i <modulated.size() ; i++) {
             r[i] = modulated.get(i);
         }
-        MyAudio audio_handler = new MyAudio(r, context, "FSK.wav");
+        AudioHandler audio_handler = new AudioHandler(r, context, "FSK.wav");
         audio_handler.writeFile();
         audio_handler.close();
     }

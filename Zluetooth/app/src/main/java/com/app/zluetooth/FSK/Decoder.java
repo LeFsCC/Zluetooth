@@ -2,7 +2,7 @@ package com.app.zluetooth.FSK;
 
 import android.content.Context;
 
-import com.app.zluetooth.Utils.MyAudio;
+import com.app.zluetooth.Utils.AudioHandler;
 import com.app.zluetooth.Utils.Recorder;
 import com.app.zluetooth.Utils.RigidData;
 import com.app.zluetooth.Utils.StringAndBinary;
@@ -10,7 +10,7 @@ import com.app.zluetooth.Utils.StringAndBinary;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Receiver {
+public class Decoder {
 
     private String file_name;
 
@@ -24,7 +24,7 @@ public class Receiver {
     private Context context;
     private Recorder r;
 
-    public Receiver(String file_name, double sample_rate, double symbol_size, Context context) {
+    public Decoder(String file_name, double sample_rate, double symbol_size, Context context) {
         this.file_name = file_name;
         this.sample_rate = sample_rate;
         this.symbol_size = symbol_size;
@@ -43,7 +43,7 @@ public class Receiver {
     public void record_stop() {
         try {
             r.stop();
-            MyAudio audio_handler = new MyAudio(context, file_name);
+            AudioHandler audio_handler = new AudioHandler(context, file_name);
             modulated = audio_handler.read();
         } catch (Exception e) {
             e.printStackTrace();

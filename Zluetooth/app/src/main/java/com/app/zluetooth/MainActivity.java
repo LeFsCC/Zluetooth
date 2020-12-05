@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.zluetooth.FSK.Receiver;
+import com.app.zluetooth.FSK.Decoder;
 import com.app.zluetooth.FSK.Encoder;
 import com.app.zluetooth.Utils.Permissions;
 import com.app.zluetooth.Utils.RigidData;
@@ -25,12 +25,11 @@ import com.app.zluetooth.WiFiComm.Server;
 
 import java.io.File;
 import java.net.UnknownHostException;
-import java.nio.charset.MalformedInputException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Encoder encoder;
-    private Receiver receiver;
+    private Decoder receiver;
     private String src;
     private double sample_rate;
     private double symbol_size;
@@ -240,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void record() {
         recovered_textView.setText("");
         Toast.makeText(this, "开始录音", Toast.LENGTH_SHORT).show();
-        receiver = new Receiver("recorded.wav", sample_rate, symbol_size, getApplicationContext());
+        receiver = new Decoder("recorded.wav", sample_rate, symbol_size, getApplicationContext());
         receiver.record_start();
     }
 
@@ -263,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void server_start(){
         rec_time1 = 0;
         rec_time2 = 0;
-        receiver = new Receiver("recorded.wav", RigidData.sample_rate, RigidData.dis_symbol_size, getApplicationContext());
+        receiver = new Decoder("recorded.wav", RigidData.sample_rate, RigidData.dis_symbol_size, getApplicationContext());
         new Thread(new Runnable() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -333,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void client_start(){
         rec_time1=0;
         rec_time2=0;
-        receiver = new Receiver("recorded.wav", RigidData.sample_rate, RigidData.dis_symbol_size, getApplicationContext());
+        receiver = new Decoder("recorded.wav", RigidData.sample_rate, RigidData.dis_symbol_size, getApplicationContext());
         new Thread(new Runnable() {
             @Override
             public void run() {

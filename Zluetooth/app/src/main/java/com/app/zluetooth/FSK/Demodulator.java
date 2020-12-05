@@ -75,45 +75,17 @@ public class Demodulator {
     }
 
     public ArrayList<Integer> getBits8(int n) {
+        String s = Integer.toBinaryString(n);
+        char[] t = s.toCharArray();
         ArrayList<Integer> bits = new ArrayList<>();
-        if (n == 0) {
+        int j = 3 - t.length;
+
+        for(int k = 0; k < j;k++) {
             bits.add(0);
-            bits.add(0);
-            bits.add(0);
-        } else if (n == 1) {
-            bits.add(0);
-            bits.add(0);
-            bits.add(1);
-        } else if (n == 2) {
-            bits.add(0);
-            bits.add(1);
-            bits.add(0);
-        } else if (n == 3) {
-            bits.add(0);
-            bits.add(1);
-            bits.add(1);
-        } else if (n == 4) {
-            bits.add(1);
-            bits.add(0);
-            bits.add(0);
-        } else if (n == 5) {
-            bits.add(1);
-            bits.add(0);
-            bits.add(1);
-        } else if (n == 6) {
-            bits.add(1);
-            bits.add(1);
-            bits.add(0);
-        } else if (n == 7) {
-            bits.add(1);
-            bits.add(1);
-            bits.add(1);
-        } else {
-            try {
-                throw new Exception("NOT A VALID NUMBER");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        }
+
+        for(int i = 0; i < s.length(); i++) {
+            bits.add(Integer.parseInt(String.valueOf(t[i])));
         }
         return bits;
     }

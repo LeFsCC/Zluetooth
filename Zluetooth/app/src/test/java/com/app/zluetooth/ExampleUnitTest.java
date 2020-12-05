@@ -13,26 +13,21 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        String src = "sfdsdf safds1f56 sdf11sdfawef1vcf vc";
-        if(src.length() == 0){
-            return ;
+        String s = Integer.toBinaryString(2);
+        char[] t = s.toCharArray();
+        ArrayList<Integer> bits = new ArrayList<>();
+        int j = 3 - t.length;
+        
+        for(int k = 0; k < j;k++) {
+            bits.add(0);
         }
 
-        ArrayList<DataPacket> dataPackets = new ArrayList<>();
-        int start_index = 0;
-        while(start_index < src.length()){
-            DataPacket dataPacket = new DataPacket();
-            if(src.length() - start_index < RigidData.number_of_letter_each_packet) {
-                dataPacket.setData(src.substring(start_index));
-            } else {
-                dataPacket.setData(src.substring(start_index, start_index + RigidData.number_of_letter_each_packet));
-            }
-            start_index += RigidData.number_of_letter_each_packet;
-            dataPackets.add(dataPacket);
+        for(int i = 0; i < s.length(); i++) {
+            bits.add(Integer.parseInt(String.valueOf(t[i])));
         }
-        System.out.println(dataPackets.size());
-        for(int i = 0; i < dataPackets.size(); i++) {
-            System.out.println(dataPackets.get(i).getData());
+
+        for(int i = 0; i < bits.size(); i++) {
+            System.out.println(bits.get(i));
         }
     }
 }

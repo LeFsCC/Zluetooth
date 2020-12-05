@@ -18,7 +18,6 @@ public class DistanceEstimation {
     }
 
     private double getWiFiPacketTime() {
-        //todo 拿到WiFi包中的时间
         try {
             String timeStamp = server.getTimeStamp();
         } catch (Exception e) {
@@ -28,7 +27,6 @@ public class DistanceEstimation {
     }
 
     private double getPacketArrivalTime() {
-        //todo 拿到音频数据包的到达时间
         return 0;
     }
 

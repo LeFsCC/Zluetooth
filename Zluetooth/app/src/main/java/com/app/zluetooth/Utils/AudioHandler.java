@@ -7,7 +7,7 @@ import android.util.Log;
 import java.io.File;
 import java.util.ArrayList;
 
-public class MyAudio {
+public class AudioHandler {
 
     private double sample_rate;
     private double duration;
@@ -18,7 +18,7 @@ public class MyAudio {
     private ArrayList<Double> modulated;
 
 
-    public MyAudio(Context context, String filename) {
+    public AudioHandler(Context context, String filename) {
         this.filename = filename;
         try {
             String root = Environment.getExternalStorageDirectory().toString();
@@ -30,7 +30,7 @@ public class MyAudio {
         }
     }
 
-    public MyAudio(Double[] src, Context context, String filename) {
+    public AudioHandler(Double[] src, Context context, String filename) {
         this.sample_rate = 44100;
         this.duration = src.length / sample_rate;
         this.n_frames = (long) (duration * sample_rate);
