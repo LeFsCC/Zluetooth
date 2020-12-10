@@ -85,8 +85,14 @@ public class Encoder {
 
     public void initModulator () {
         Modulator fsk_modulator = new Modulator(symbol_size);
-        for(int i = 0; i < dataPackets.size(); i++) {
-            fsk_modulator.setData(dataPackets.get(i).getBi_data());
+        if(dataPackets!=null){
+            for(int i = 0; i < dataPackets.size(); i++) {
+                fsk_modulator.setData(dataPackets.get(i).getBi_data());
+                fsk_modulator.modulate();
+                modulated.addAll(fsk_modulator.getModulated());
+            }
+
+        }else{
             fsk_modulator.modulate();
             modulated.addAll(fsk_modulator.getModulated());
         }
@@ -99,6 +105,7 @@ public class Encoder {
         }
         AudioHandler audio_handler = new AudioHandler(r, context, "FSK.wav");
         audio_handler.writeFile();
+        modulated.clear();
         audio_handler.close();
     }
 }

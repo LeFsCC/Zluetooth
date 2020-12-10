@@ -59,16 +59,19 @@ public class Modulator {
         }
 
         modulated.addAll(carriers.get(0).generate_chirp_sync());
-        for (int i = 0; i < data.length - (level - 1); i += level) {
-            temp[0] = data[i];
-            temp[1] = data[i + 1];
-            temp[2] = data[i + 2];
-            if(level == 4) {
-                temp[3] = data[i + 3];
+        if(data!=null){
+            for (int i = 0; i < data.length - (level - 1); i += level) {
+                temp[0] = data[i];
+                temp[1] = data[i + 1];
+                temp[2] = data[i + 2];
+                if(level == 4) {
+                    temp[3] = data[i + 3];
+                }
+                if(level == 3) {
+                    map8(temp);
+                }
             }
-            if(level == 3) {
-                map8(temp);
-            }
+
         }
 
         // 后面加白, 为了和下一个数据包分开
