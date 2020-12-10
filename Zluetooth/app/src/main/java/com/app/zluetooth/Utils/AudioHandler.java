@@ -31,7 +31,7 @@ public class AudioHandler {
     }
 
     public AudioHandler(Double[] src, Context context, String filename) {
-        this.sample_rate = 44100;
+        this.sample_rate = RigidData.sample_rate;
         this.duration = src.length / sample_rate;
         this.n_frames = (long) (duration * sample_rate);
         this.filename = filename;

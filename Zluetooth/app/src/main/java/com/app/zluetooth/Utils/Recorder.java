@@ -24,7 +24,7 @@ public class Recorder {
     private static final String AUDIO_RECORDER_FILE_EXT_WAV = "recorded.wav";
     private static final String AUDIO_RECORDER_FOLDER = "0ZlueTooth";
     private static final String AUDIO_RECORDER_TEMP_FILE = "recorded.raw";
-    private static final int RECORDER_SAMPLERATE = 44100;
+    private static final int RECORDER_SAMPLERATE = RigidData.sample_rate;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     private static final int RECORDER_CHANNELS_INT = 1;
 
@@ -49,7 +49,7 @@ public class Recorder {
             buffercount = 1;
         recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT,
                 RECORDER_SAMPLERATE, RECORDER_CHANNELS,
-                RECORDER_AUDIO_ENCODING, 44100);
+                RECORDER_AUDIO_ENCODING, RigidData.sample_rate);
 
         if (AutomaticGainControl.isAvailable()) {
             System.out.println("AGC IS AVAILIABLE");

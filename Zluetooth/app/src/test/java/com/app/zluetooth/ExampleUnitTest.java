@@ -13,21 +13,13 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        String s = Integer.toBinaryString(2);
-        char[] t = s.toCharArray();
-        ArrayList<Integer> bits = new ArrayList<>();
-        int j = 3 - t.length;
-        
-        for(int k = 0; k < j;k++) {
-            bits.add(0);
-        }
-
-        for(int i = 0; i < s.length(); i++) {
-            bits.add(Integer.parseInt(String.valueOf(t[i])));
-        }
-
-        for(int i = 0; i < bits.size(); i++) {
-            System.out.println(bits.get(i));
+        int[] n_bi_data = new int[5];
+        int[] bi_data = {0, 1, 2};
+        int[] n_data = {3, 4};
+        System.arraycopy(bi_data, 0, n_bi_data, 0, bi_data.length);
+        System.arraycopy(n_data, 0, n_bi_data, bi_data.length, n_data.length);
+        for(int bit : n_bi_data){
+            System.out.println(bit);
         }
     }
 }

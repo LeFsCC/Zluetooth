@@ -9,6 +9,7 @@ import com.app.zluetooth.Utils.RigidData;
 import com.app.zluetooth.Utils.StringAndBinary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Encoder {
 
@@ -42,6 +43,7 @@ public class Encoder {
         return dataPackets;
     }
 
+    // 数据包分包
     public Encoder(String src, double symbol_size, Context context) {
         Encoder.symbol_size = symbol_size;
         Encoder.context = context;
@@ -51,13 +53,34 @@ public class Encoder {
                 for(int i = 0; i < dataPackets.size(); i++) {
                     DataPacket dataPacket = dataPackets.get(i);
                     StringAndBinary stringToBinary = new StringAndBinary(dataPacket.getData());
-                    dataPacket.setBi_data(stringToBinary.getB());
+                    // 获取数据
+                    int[] data = stringToBinary.getB();
+                    // 在包头加上包长，用8位表示
+                    System.out.println("packet length " + data.length);
+                    dataPacket.setBi_data(getPacketLengthBi(data.length));
+                    // 加上数据
+                    dataPacket.add_data(data);
                 }
             }
         } catch (Exception ignored){
 
         }
         initModulator();
+    }
+
+    // 将包长转化为8位二进制
+    private int[] getPacketLengthBi(int len) {
+        String s = Integer.toBinaryString(len);
+        char[] t = s.toCharArray();
+        int[] bits = new int[9];
+        for(int i = 0; i < 9 - s.length(); i++) {
+            bits[i] = 0;
+        }
+        for(int i = 9 - s.length(); i < s.length(); i++) {
+            bits[i] = Integer.parseInt(String.valueOf(t[i - (9 - s.length())]));
+        }
+        System.out.println(Arrays.toString(bits));
+        return bits;
     }
 
     public void initModulator () {

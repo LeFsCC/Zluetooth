@@ -115,23 +115,51 @@ public class Decoder {
         int start_index = locate_start(0);
 
         while(start_index < modulated.size()) {
-            recover_signal(start_index, Math.min(start_index + 8 * RigidData.number_of_letter_each_packet * (int) (symbol_size * sample_rate) / 3, modulated.size()));
-            start_index += 8 * RigidData.number_of_letter_each_packet * (int)(symbol_size * sample_rate) / 3;
-            start_index = locate_start(start_index + 100);
+            // 得到 payload 的长度
+            int packet_len = decode_packet_length(start_index, start_index + 9 * (int) (symbol_size * sample_rate) / RigidData.module_order);
+            if(packet_len == -1 || packet_len == 0) return;
+            // 起始点移动到数据段
+            start_index += 9 * (int) (symbol_size * sample_rate) / RigidData.module_order;
+            // 解码 payload
+            recover_signal(start_index, Math.min(start_index + packet_len * (int) (symbol_size * sample_rate) / RigidData.module_order, modulated.size()));
+            // 向后滑窗
+            start_index += packet_len * (int)(symbol_size * sample_rate) / RigidData.module_order;
+            start_index = locate_start(start_index + 10);
             if(start_index == -1) return;
         }
+    }
+
+    private int decode_packet_length(int start_index, int end_index) {
+        if(start_index == -1) return -1;
+        recovered_signal.clear();
+        System.out.println("///////////////////////  packet length  start ///////////////////////////////////");
+        recovered_signal.addAll(modulated.subList(start_index, end_index));
+        fsk_demodulator = new Demodulator(sample_rate, symbol_size, recovered_signal);
+        fsk_demodulator.demodulate();
+        demodulated = fsk_demodulator.getDemodulated();
+        int p_len = getNumberFromBits(demodulated);
+        System.out.println("packet length: " + p_len);
+        System.out.println("///////////////////////  packet length  end ///////////////////////////////////");
+        return p_len;
+    }
+
+    private int getNumberFromBits(ArrayList<Integer> bits) {
+        StringBuilder ee = new StringBuilder();
+        for(int bit: bits) {
+            ee.append(bit);
+        }
+        return Integer.parseInt(ee.toString(), 2);
     }
 
     private void recover_signal(int start_index, int end_index) {
         if(start_index == -1) return;
         recovered_signal.clear();
-        System.out.println("Recovered String");
-        System.out.println("----------------------------------------------------------------");
+        System.out.println("------------------------  recovered string  start ----------------------------------------");
         recovered_signal.addAll(modulated.subList(start_index, end_index));
         fsk_demodulator = new Demodulator(sample_rate, symbol_size, recovered_signal);
         String res = demodulate();
         System.out.println(res);
-        System.gc();
+        System.out.println("------------------------  recovered string  end ----------------------------------------");
     }
 
     private String demodulate() {
@@ -153,7 +181,7 @@ public class Decoder {
         }
     }
 
-    public String getRecoverd_string() {
+    public String getRecoveredString() {
         return recovered_string;
     }
 }

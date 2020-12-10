@@ -36,14 +36,14 @@ public class Demodulator {
         frequencies = new int[number_of_carriers];
         frequencies[0] = fs;
         for (int i = 1; i < number_of_carriers; i++) {
-            frequencies[i] = frequencies[i - 1] + 625;
+            frequencies[i] = frequencies[i - 1] + RigidData.time_interval;
         }
     }
 
     public void initCarriers() {
         carriers = new ArrayList<>();
         for (int i = 0; i < number_of_carriers; i++) {
-            SignalGenerator s = new SignalGenerator(symbol_size, frequencies[i], 1.0 / 44100.0);
+            SignalGenerator s = new SignalGenerator(symbol_size, frequencies[i], 1.0 / (double)RigidData.sample_rate);
             s.generate();
             carriers.add(s);
         }
@@ -53,6 +53,7 @@ public class Demodulator {
         try {
             double[] temp = toArray();
             ArrayList<Double> holder = new ArrayList<>();
+            System.out.println("symbol_size * sample_rate " + symbol_size * sample_rate);
             for (int i = 0; i < modulated.size(); i += (int) (symbol_size * sample_rate)) {
 
                 double[] Symbol = Arrays.copyOfRange(temp, i, (int) (i + symbol_size * sample_rate));
@@ -74,7 +75,17 @@ public class Demodulator {
         }
     }
 
-    public ArrayList<Integer> getBits8(int n) {
+    private ArrayList<Integer> getBits2(int n) {
+        String s = Integer.toBinaryString(n);
+        char[] t = s.toCharArray();
+        ArrayList<Integer> bits = new ArrayList<>();
+        for(int i = 0; i < s.length(); i++) {
+            bits.add(Integer.parseInt(String.valueOf(t[i])));
+        }
+        return bits;
+    }
+
+    private ArrayList<Integer> getBits8(int n) {
         String s = Integer.toBinaryString(n);
         char[] t = s.toCharArray();
         ArrayList<Integer> bits = new ArrayList<>();

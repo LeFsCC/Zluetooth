@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         receiver.record_stop();
         receiver.recover_data_packet();
         recovered_string = "";
-        recovered_string = receiver.getRecoverd_string();
+        recovered_string = receiver.getRecoveredString();
         recovered_textView.setText(recovered_string);
     }
 
