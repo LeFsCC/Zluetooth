@@ -1,6 +1,5 @@
 package com.app.zluetooth.FSK;
 
-import com.app.zluetooth.Exception.ZlueToothException;
 import com.app.zluetooth.Utils.RigidData;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class Demodulator {
         frequencies = new int[number_of_carriers];
         frequencies[0] = fs;
         for (int i = 1; i < number_of_carriers; i++) {
-            frequencies[i] = frequencies[i - 1] + RigidData.time_interval;
+            frequencies[i] = frequencies[i - 1] + RigidData.frequency_interval;
         }
     }
 
