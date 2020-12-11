@@ -65,3 +65,8 @@ Acoustic communication using FSK modulation tech, IOT course project, Jiliang Wa
 - Client 客户端
 - Server 服务端
 
+#### interface
+![1](https://github.com/ZangJac/Zluetooth/blob/main/img/1.jpg)
+
+![2](https://github.com/ZangJac/Zluetooth/blob/main/img/2.jpg)
+
