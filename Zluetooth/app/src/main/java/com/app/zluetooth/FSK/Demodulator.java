@@ -64,7 +64,11 @@ public class Demodulator {
                 double max = Collections.max(holder);
                 for (int n = 0; n < holder.size(); n++) {
                     if (max == holder.get(n)) {
-                        demodulated.addAll(getBits8(n));
+                        if(RigidData.module_order == 1) {
+                            demodulated.addAll(getBits2(n));
+                        } else {
+                            demodulated.addAll(getBits8(n));
+                        }
                     }
                 }
                 holder.clear();

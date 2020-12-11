@@ -246,7 +246,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void decode() {
         Toast.makeText(this, "录音结束", Toast.LENGTH_SHORT).show();
         receiver.record_stop();
-        receiver.recover_data_packet();
+//        receiver.recover_data_packet();
+        receiver.recover_test_data_packet();
         recovered_string = "";
         recovered_string = receiver.getRecoveredString();
         recovered_textView.setText(recovered_string);

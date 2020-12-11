@@ -53,7 +53,7 @@ public class MatchedFilter {
         Collections.reverse(chirp_signal);
     }
 
-    public void matchSignal_3() {
+    public void matchSignalAmp() {
         filter_out = new double[modulated.size()];
         for (int i = 0; i <  modulated.size(); i++) {
             filter_out[i] = modulated.get(i);
@@ -61,7 +61,7 @@ public class MatchedFilter {
         filter_out = abs(filter_out);
     }
 
-    public void matchSignal_2() {
+    public void matchSignalCorr() {
         try {
             filter_out = new double[modulated.size()];
             for (int i = 0; i <  modulated.size(); i++) {

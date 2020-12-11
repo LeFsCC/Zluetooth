@@ -43,6 +43,9 @@ public class Decoder {
     public void record_stop() {
         try {
             r.stop();
+            if(RigidData.module_order == 1) {
+                file_name = "res.wav";
+            }
             AudioHandler audio_handler = new AudioHandler(context, file_name);
             modulated = audio_handler.read();
         } catch (Exception e) {
@@ -110,10 +113,35 @@ public class Decoder {
         }
     }
 
+    private int[] prepare_test_data() {
+        int[] start_list = {42146, 160527, 276919, 387240, 506762, 627856, 745554, 864303, 983078,
+                1099950, 1217318, 1333381, 1451535, 1576127, 1695598, 1811091, 1936826, 2058047,
+                2173721, 2281867, 2399390, 2517984, 2639324, 2746252, 2866140, 2990318, 3107822,
+                3228058, 3346078, 3467256, 3591416, 3716040, 3838144, 3958684, 4075113
+        };
+
+        for(int i = 0; i < start_list.length; i++) {
+            start_list[i] += 24000;
+        }
+        return start_list;
+    }
+
+    public void recover_test_data_packet() {
+        recovered_string = "";
+        int start_index = 0;
+        int[] start_list = prepare_test_data();
+
+        for (int value : start_list) {
+            int packet_len = decode_packet_length(value, value + 8 * (int) (symbol_size * sample_rate));
+            if (packet_len == -1 || packet_len == 0) continue;
+            start_index = value + 8 * (int) (symbol_size * sample_rate);
+            recover_signal(start_index, Math.min(start_index + packet_len * (int) (symbol_size * sample_rate), modulated.size()));
+        }
+    }
+
     public void recover_data_packet() {
         recovered_string = "";
         int start_index = locate_start(0);
-
         while(start_index < modulated.size()) {
             // 得到 payload 的长度
             int packet_len = decode_packet_length(start_index, start_index + 9 * (int) (symbol_size * sample_rate) / RigidData.module_order);
@@ -157,22 +185,21 @@ public class Decoder {
         System.out.println("------------------------  recovered string  start ----------------------------------------");
         recovered_signal.addAll(modulated.subList(start_index, end_index));
         fsk_demodulator = new Demodulator(sample_rate, symbol_size, recovered_signal);
-        String res = demodulate();
-        System.out.println(res);
+        demodulate();
         System.out.println("------------------------  recovered string  end ----------------------------------------");
     }
 
-    private String demodulate() {
+    private void demodulate() {
         if(recovered_signal.get(0) == -1.0) {
             recovered_string = "-1";
-            return "no signal";
+            return;
         }
 
         fsk_demodulator.demodulate();
         demodulated = fsk_demodulator.getDemodulated();
+        System.out.println(demodulated);
         StringAndBinary string_handler = new StringAndBinary(demodulated);
         recovered_string = recovered_string.concat(string_handler.getString());
-        return recovered_string;
     }
 
     private void printBitStream() {
