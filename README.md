@@ -1,6 +1,10 @@
 # Zluetooth
 Acoustic communication using FSK modulation tech, IOT course project, Jiliang Wang, Tsinghua. 2020
 
+### CONTACT
+有任何问题，请加微信联系：jc-zhang17
+
+
 #### DistanceEstimation
 
 - DistanceEstimation.java 使用**beepbeep**原理进行手机测距
@@ -64,4 +68,9 @@ Acoustic communication using FSK modulation tech, IOT course project, Jiliang Wa
 - ApManager 得到本地ip
 - Client 客户端
 - Server 服务端
+
+#### interface
+![image1](https://github.com/ZangJac/Zluetooth/blob/main/img/1.jpg)
+
+![image2](https://github.com/ZangJac/Zluetooth/blob/main/img/2.jpg)
 
