@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText input_ip;
     private EditText input_port;
     private Button send_msg;
+    private TextView decode_time_consuming;
+    private TextView transmitting_time;
 
 
     @SuppressLint("SetTextI18n")
@@ -84,11 +86,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         receive_btn = findViewById(R.id.receive_btn);
         encode_btn = findViewById(R.id.encode_btn);
         recovered_textView = findViewById(R.id.decode_data_txt);
+        decode_time_consuming = findViewById(R.id.decode_time_consuming);
+        transmitting_time = findViewById(R.id.transmitting_time);
+
 
         decode_btn.setOnClickListener(this);
         transmit_btn.setOnClickListener(this);
         receive_btn.setOnClickListener(this);
         encode_btn.setOnClickListener(this);
+
 
         mEdit = findViewById(R.id.raw_data_txt);
 
@@ -225,6 +231,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mediaplayer.setDataSource(dir + File.separator + "FSK.wav");
             mediaplayer.prepare();
             mediaplayer.start();
+            new Thread(new Runnable() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void run() {
+                    while(mediaplayer.isPlaying() && mediaplayer.getCurrentPosition() < mediaplayer.getDuration()) {
+                        int t = (mediaplayer.getDuration() - mediaplayer.getCurrentPosition()) / 1000;
+                        try{
+                            transmitting_time.setText(t / 60 + "分" + t % 60 + "秒");
+                        } catch (Exception e) {
+
+                        }
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -243,11 +268,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         receiver.record_start();
     }
 
+    @SuppressLint("SetTextI18n")
     public void decode() {
         Toast.makeText(this, "录音结束", Toast.LENGTH_SHORT).show();
         receiver.record_stop();
-//        receiver.recover_data_packet();
         receiver.recover_test_data_packet();
+//        receiver.recover_data_packet();
+
+        double recover_time = receiver.getRecover_time();
+        recovered_textView.setText("解码用时：" + ((int) recover_time) / 1000);
         recovered_string = "";
         recovered_string = receiver.getRecoveredString();
         recovered_textView.setText(recovered_string);

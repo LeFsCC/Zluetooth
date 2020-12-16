@@ -1,12 +1,16 @@
 package com.app.zluetooth.FSK;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.app.zluetooth.Utils.AudioHandler;
+import com.app.zluetooth.Utils.CSVFile;
+import com.app.zluetooth.Utils.CsvRead;
 import com.app.zluetooth.Utils.Recorder;
 import com.app.zluetooth.Utils.RigidData;
 import com.app.zluetooth.Utils.StringAndBinary;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +27,9 @@ public class Decoder {
     private String recovered_string;
     private Context context;
     private Recorder r;
+    private double start_time = 0.0;
+    private double recover_time = 0.0;
+    private ArrayList<ArrayList<Integer>> demodulatedList = new ArrayList<>();
 
     public Decoder(String file_name, double sample_rate, double symbol_size, Context context) {
         this.file_name = file_name;
@@ -84,7 +91,7 @@ public class Decoder {
                 if(res.size() != 0) {
                     double cur_max = res.get(0);
                     double temp = res.get(1);
-                    if((last_max > 0.001 && (cur_max / last_max) >= 40)) {
+                    if((last_max > 0.005 && (cur_max / last_max) >= 40) || cur_max > 30.0) {
                         start_index = (int) temp;
                         // 滑窗再次滑动, 找到真正的最大值
                         int offset2 = offset + (int)(symbol_size * sample_rate);
@@ -94,13 +101,11 @@ public class Decoder {
                         res = matched_filter.get_start_index();
                         double cur_max2 = res.get(0);
                         double temp_2 = res.get(1);
-                        double tmp1 = cur_max/cur_max2;
-                        if(tmp1<1.15 && tmp1>0.87){
-                            return (int)(temp_2 + offset2+start_index + offset)/2;
-                        }
                         if(cur_max2 > cur_max) {
+                            Log.e("cur_max2", String.valueOf(cur_max2));
                             return (int) (temp_2 + offset2);
                         } else {
+                            Log.e("cur_max", String.valueOf(cur_max));
                             return start_index + offset;
                         }
                     }
@@ -113,23 +118,30 @@ public class Decoder {
         }
     }
 
-    private int[] prepare_test_data() {
-        int[] start_list = {42146, 160527, 276919, 387240, 506762, 627856, 745554, 864303, 983078,
-                1099950, 1217318, 1333381, 1451535, 1576127, 1695598, 1811091, 1936826, 2058047,
-                2173721, 2281867, 2399390, 2517984, 2639324, 2746252, 2866140, 2990318, 3107822,
-                3228058, 3346078, 3467256, 3591416, 3716040, 3838144, 3958684, 4075113
-        };
-
-        for(int i = 0; i < start_list.length; i++) {
-            start_list[i] += 24000;
-        }
-        return start_list;
-    }
-
     public void recover_test_data_packet() {
+        CsvRead csvRead = new CsvRead();
+        csvRead.read();
+        RigidData.sample_rate = csvRead.getSample_rate();
+        RigidData.fs = csvRead.getFrequency_low();
+        RigidData.frequency_interval = csvRead.getFrequency_high() - csvRead.getFrequency_low();
+        RigidData.symbol_size = csvRead.getSymbol_duration().doubleValue();
+        RigidData.module_order = 1;
+        RigidData.number_of_carriers = 2;
+        System.out.println(RigidData.fs + " " + RigidData.frequency_interval + " " + RigidData.symbol_size + " " + RigidData.sample_rate);
+
+        file_name = "res.wav";
+        AudioHandler audio_handler = new AudioHandler(context, file_name);
+        modulated = audio_handler.read();
+
+        sample_rate = RigidData.sample_rate;
+        symbol_size = RigidData.symbol_size;
+        int[] start_list = toArray(csvRead.getOnsetList());
+
+
+        start_time = System.currentTimeMillis();
+        recover_time = 0.0;
         recovered_string = "";
         int start_index = 0;
-        int[] start_list = prepare_test_data();
 
         for (int value : start_list) {
             int packet_len = decode_packet_length(value, value + 8 * (int) (symbol_size * sample_rate));
@@ -137,15 +149,29 @@ public class Decoder {
             start_index = value + 8 * (int) (symbol_size * sample_rate);
             recover_signal(start_index, Math.min(start_index + packet_len * (int) (symbol_size * sample_rate), modulated.size()));
         }
+        recover_time = System.currentTimeMillis() - start_time;
+        CSVFile csvFile = new CSVFile();
+        csvFile.setData(demodulatedList);
+        csvFile.writeCsvFile();
+    }
+
+    private int[] toArray(ArrayList<Integer> lists) {
+        int[] arr = new int[lists.size()];
+        for(int i = 0; i < lists.size(); i++) {
+            arr[i] = lists.get(i);
+        }
+        return arr;
     }
 
     public void recover_data_packet() {
+        start_time = System.currentTimeMillis();
+        recover_time = 0.0;
         recovered_string = "";
         int start_index = locate_start(0);
         while(start_index < modulated.size()) {
             // 得到 payload 的长度
             int packet_len = decode_packet_length(start_index, start_index + 9 * (int) (symbol_size * sample_rate) / RigidData.module_order);
-            if(packet_len == -1 || packet_len == 0) return;
+            if(packet_len == -1 || packet_len == 0) break;
             // 起始点移动到数据段
             start_index += 9 * (int) (symbol_size * sample_rate) / RigidData.module_order;
             // 解码 payload
@@ -153,8 +179,9 @@ public class Decoder {
             // 向后滑窗
             start_index += packet_len * (int)(symbol_size * sample_rate) / RigidData.module_order;
             start_index = locate_start(start_index + 10);
-            if(start_index == -1) return;
+            if(start_index == -1) break;
         }
+        recover_time = System.currentTimeMillis() - start_time;
     }
 
     private int decode_packet_length(int start_index, int end_index) {
@@ -198,17 +225,16 @@ public class Decoder {
         fsk_demodulator.demodulate();
         demodulated = fsk_demodulator.getDemodulated();
         System.out.println(demodulated);
+        demodulatedList.add(demodulated);
         StringAndBinary string_handler = new StringAndBinary(demodulated);
         recovered_string = recovered_string.concat(string_handler.getString());
     }
 
-    private void printBitStream() {
-        for (int i = 0; i < demodulated.size(); i++) {
-            System.out.print(demodulated.get(i));
-        }
-    }
-
     public String getRecoveredString() {
         return recovered_string;
+    }
+
+    public double getRecover_time() {
+        return recover_time;
     }
 }

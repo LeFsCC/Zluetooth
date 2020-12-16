@@ -1,18 +1,18 @@
 package com.app.zluetooth.Utils;
 
 public class RigidData {
-    public final static int fs = 4000;      // start frequency 5000
-    public final static int sync_fs = 14000;   // end frequency 15000
+    public static int fs = 5000;      // start frequency 5000
+    public static int sync_fs = 15000;   // end frequency 15000
 
-    public final static int number_of_carriers = 2; // 2 or 8
-    public final static int module_order = 1;       // 3 for 8, 2 for 4, 1 for 2
-    public final static int frequency_interval = 2000;   // 625
+    public static int number_of_carriers = 8; // 2 or 8
+    public static int module_order = 3;       // 3 for 8, 2 for 4, 1 for 2
+    public static int frequency_interval = 625;   // 625
 
-    public final static int sample_rate = 48000;  // 44100
-    public final static double symbol_size = 0.025; // s
-    public final static int number_of_letter_each_packet = 12;
+    public static int sample_rate = 44100;  // 44100
+    public static double symbol_size = 0.2; // s
+    public static int number_of_letter_each_packet = 12;
 
-    public final static int dis_fs = 4000;
-    public final static int sync_dis_fs = 14000;
-    public final static double dis_symbol_size = 0.02;
+    public static int dis_fs = 4000;
+    public static int sync_dis_fs = 14000;
+    public static double dis_symbol_size = 0.2;
 }

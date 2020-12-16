@@ -19,9 +19,9 @@ public class CSVFile {
 
     public void writeCsvFile() {
         String root = Environment.getExternalStorageDirectory().toString();
-        String filePath = "E://0//";     // 0ZlueTooth/
-        String fileName = "CSV_1.csv";
-        File csvFile = new File(filePath, fileName);
+        String filePath = "/0ZlueTooth/";
+        String fileName = "result.csv";
+        File csvFile = new File(root + filePath, fileName);
         BufferedWriter csvWriter;
         try{
             File parent = csvFile.getParentFile();
@@ -31,8 +31,10 @@ public class CSVFile {
             csvFile.createNewFile();
             csvWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(csvFile), "GB2312"), 1024);
             for (ArrayList<Integer> bits : data) {
+                String rowStr = "\"" + bits.size() + "\",";
+                csvWriter.write(rowStr);
                 for(Integer e : bits) {
-                    String rowStr = "\"" + e + "\",";
+                    rowStr = "\"" + e + "\",";
                     csvWriter.write(rowStr);
                 }
                 csvWriter.newLine();
