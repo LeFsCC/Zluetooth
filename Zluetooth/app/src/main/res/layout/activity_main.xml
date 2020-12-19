@@ -23,7 +23,7 @@
             android:layout_width="150dp"
             android:text="测距"
             android:textSize="22sp"
-            android:layout_height="50dp">
+            android:layout_height="40dp">
         </Button>
 
         <Button
@@ -34,13 +34,14 @@
             android:layout_width="150dp"
             android:text="通信"
             android:textSize="22sp"
-            android:layout_height="50dp">
+            android:layout_height="40dp">
         </Button>
 
     </LinearLayout>
 
 
     <LinearLayout
+        android:layout_marginTop="100dp"
         android:layout_width="513dp"
         android:layout_height="1193dp"
         android:gravity="center"
@@ -74,7 +75,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -106,7 +107,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -141,17 +142,17 @@
             android:layout_width="200dp"
             android:text="用时：0s"
             android:textSize="20sp"
-            android:layout_height="40dp">
+            android:layout_height="30dp">
 
         </TextView>
 
         <TextView
             android:id="@+id/transmitting_time"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_width="200dp"
             android:text="00:00"
             android:textSize="20sp"
-            android:layout_height="40dp">
+            android:layout_height="30dp">
 
         </TextView>
 

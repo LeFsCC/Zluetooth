@@ -231,25 +231,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mediaplayer.setDataSource(dir + File.separator + "FSK.wav");
             mediaplayer.prepare();
             mediaplayer.start();
-            new Thread(new Runnable() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void run() {
-                    while(mediaplayer.isPlaying() && mediaplayer.getCurrentPosition() < mediaplayer.getDuration()) {
-                        int t = (mediaplayer.getDuration() - mediaplayer.getCurrentPosition()) / 1000;
-                        try{
-                            transmitting_time.setText(t / 60 + "分" + t % 60 + "秒");
-                        } catch (Exception e) {
-
-                        }
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -272,8 +253,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void decode() {
         Toast.makeText(this, "录音结束", Toast.LENGTH_SHORT).show();
         receiver.record_stop();
-        receiver.recover_test_data_packet();
-//        receiver.recover_data_packet();
+//        receiver.recover_test_data_packet();
+        receiver.recover_data_packet();
 
         double recover_time = receiver.getRecover_time();
         recovered_textView.setText("解码用时：" + ((int) recover_time) / 1000);

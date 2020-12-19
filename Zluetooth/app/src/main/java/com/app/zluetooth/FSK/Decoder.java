@@ -50,9 +50,6 @@ public class Decoder {
     public void record_stop() {
         try {
             r.stop();
-            if(RigidData.module_order == 1) {
-                file_name = "res.wav";
-            }
             AudioHandler audio_handler = new AudioHandler(context, file_name);
             modulated = audio_handler.read();
         } catch (Exception e) {
@@ -91,7 +88,7 @@ public class Decoder {
                 if(res.size() != 0) {
                     double cur_max = res.get(0);
                     double temp = res.get(1);
-                    if((last_max > 0.005 && (cur_max / last_max) >= 40) || cur_max > 30.0) {
+                    if((last_max > 0.001 && (cur_max / last_max) >= 60)) {
                         start_index = (int) temp;
                         // 滑窗再次滑动, 找到真正的最大值
                         int offset2 = offset + (int)(symbol_size * sample_rate);
