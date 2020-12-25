@@ -31,13 +31,13 @@ public class Decoder {
     private double recover_time = 0.0;
     private ArrayList<ArrayList<Integer>> demodulatedList = new ArrayList<>();
 
+
     public Decoder(String file_name, double sample_rate, double symbol_size, Context context) {
         this.file_name = file_name;
         this.sample_rate = sample_rate;
         this.symbol_size = symbol_size;
         this.context = context;
     }
-
     public void record_start() {
         try {
             r = new Recorder("TEST");
@@ -62,13 +62,13 @@ public class Decoder {
         if(st >= modulated.size()) {
             return -1;
         }
-
+        double new_symbol_size = symbol_size * 1.0;
         try {
             List<Double> sub_signal = new ArrayList<>();
-            sub_signal = modulated.subList(st, st + (int)(symbol_size * sample_rate));
+            sub_signal = modulated.subList(st, st + (int)(new_symbol_size * sample_rate));
             ArrayList<Double> temp_signal = new ArrayList<>(sub_signal);
 
-            MatchedFilter matched_filter = new MatchedFilter(symbol_size, sample_rate, temp_signal);
+            MatchedFilter matched_filter = new MatchedFilter(new_symbol_size, sample_rate, temp_signal);
 
             ArrayList<Double> res = matched_filter.get_start_index();
             int start_index = -1;
@@ -79,11 +79,11 @@ public class Decoder {
 
             int offset = st;
 
-            while(offset + (int)(symbol_size * sample_rate) < modulated.size()) {
-                offset += symbol_size * sample_rate;
-                sub_signal = modulated.subList(offset, (int)(offset + symbol_size * sample_rate));
+            while(offset + (int)(new_symbol_size * sample_rate) < modulated.size()) {
+                offset += new_symbol_size * sample_rate;
+                sub_signal = modulated.subList(offset, (int)(offset + new_symbol_size * sample_rate));
                 temp_signal = new ArrayList<>(sub_signal);
-                matched_filter = new MatchedFilter(symbol_size, sample_rate, temp_signal);
+                matched_filter = new MatchedFilter(new_symbol_size, sample_rate, temp_signal);
                 res = matched_filter.get_start_index();
                 if(res.size() != 0) {
                     double cur_max = res.get(0);
@@ -91,10 +91,10 @@ public class Decoder {
                     if((last_max > 0.001 && (cur_max / last_max) >= 60)) {
                         start_index = (int) temp;
                         // 滑窗再次滑动, 找到真正的最大值
-                        int offset2 = offset + (int)(symbol_size * sample_rate);
-                        sub_signal = modulated.subList(offset2, (int)(offset2 + symbol_size * sample_rate));
+                        int offset2 = offset + (int)(new_symbol_size * sample_rate);
+                        sub_signal = modulated.subList(offset2, (int)(offset2 + new_symbol_size * sample_rate));
                         temp_signal = new ArrayList<>(sub_signal);
-                        matched_filter = new MatchedFilter(symbol_size, sample_rate, temp_signal);
+                        matched_filter = new MatchedFilter(new_symbol_size, sample_rate, temp_signal);
                         res = matched_filter.get_start_index();
                         double cur_max2 = res.get(0);
                         double temp_2 = res.get(1);
@@ -124,7 +124,6 @@ public class Decoder {
         RigidData.symbol_size = csvRead.getSymbol_duration().doubleValue();
         RigidData.module_order = 1;
         RigidData.number_of_carriers = 2;
-        System.out.println(RigidData.fs + " " + RigidData.frequency_interval + " " + RigidData.symbol_size + " " + RigidData.sample_rate);
 
         file_name = "res.wav";
         AudioHandler audio_handler = new AudioHandler(context, file_name);

@@ -12,5 +12,5 @@ public class RigidData {
     public static double symbol_size = 0.2; // s
     public static int number_of_letter_each_packet = 12;
 
-    public static double dis_symbol_size = 0.2;
+    public static double dis_symbol_size = 0.5;
 }

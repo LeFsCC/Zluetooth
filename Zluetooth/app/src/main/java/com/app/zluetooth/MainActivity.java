@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText input_port;
     private Button send_msg;
     private TextView decode_time_consuming;
-    private TextView transmitting_time;
 
 
     @SuppressLint("SetTextI18n")
@@ -87,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         encode_btn = findViewById(R.id.encode_btn);
         recovered_textView = findViewById(R.id.decode_data_txt);
         decode_time_consuming = findViewById(R.id.decode_time_consuming);
-        transmitting_time = findViewById(R.id.transmitting_time);
 
 
         decode_btn.setOnClickListener(this);
@@ -257,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         receiver.recover_data_packet();
 
         double recover_time = receiver.getRecover_time();
-        recovered_textView.setText("解码用时：" + ((int) recover_time) / 1000);
+        decode_time_consuming.setText("解码用时：" + ((int) recover_time) + "ms");
         recovered_string = "";
         recovered_string = receiver.getRecoveredString();
         recovered_textView.setText(recovered_string);

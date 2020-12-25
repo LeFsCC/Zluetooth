@@ -140,17 +140,7 @@
             android:id="@+id/decode_time_consuming"
             android:layout_marginTop="20dp"
             android:layout_width="200dp"
-            android:text="用时：0s"
-            android:textSize="20sp"
-            android:layout_height="30dp">
-
-        </TextView>
-
-        <TextView
-            android:id="@+id/transmitting_time"
-            android:layout_marginTop="10dp"
-            android:layout_width="200dp"
-            android:text="00:00"
+            android:text="用时：0ms"
             android:textSize="20sp"
             android:layout_height="30dp">
 
