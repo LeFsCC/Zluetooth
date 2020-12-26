@@ -13,4 +13,15 @@ public class RigidData {
     public static int number_of_letter_each_packet = 12;
 
     public static double dis_symbol_size = 0.5;
+    public static void reset() {
+        RigidData.fs = 5000;
+        RigidData.sync_fs = 15000;
+        RigidData.number_of_carriers = 8;
+        RigidData.module_order = 3;
+        RigidData.frequency_interval = 625;
+        RigidData.sample_rate = 44100;
+        RigidData.symbol_size = 0.2;
+        RigidData.number_of_letter_each_packet = 12;
+        RigidData.dis_symbol_size = 0.5;
+    }
 }

@@ -146,6 +146,24 @@
 
         </TextView>
 
+        <RadioGroup
+            android:id="@+id/radioGroupId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/testButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="验收"/>
+            <RadioButton
+                android:layout_marginLeft="30dp"
+                android:id ="@+id/notestButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="非验收"/>
+        </RadioGroup>
+
 
     </LinearLayout>
 

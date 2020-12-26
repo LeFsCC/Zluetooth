@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText input_port;
     private Button send_msg;
     private TextView decode_time_consuming;
+    private RadioGroup radioGroup;
+    private RadioButton testBtn, noTestBtn;
+    private int comMode = 0; // no test mode;
 
 
     @SuppressLint("SetTextI18n")
@@ -86,6 +91,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         encode_btn = findViewById(R.id.encode_btn);
         recovered_textView = findViewById(R.id.decode_data_txt);
         decode_time_consuming = findViewById(R.id.decode_time_consuming);
+        radioGroup = findViewById(R.id.radioGroupId);
+        testBtn = findViewById(R.id.testButton);
+        noTestBtn = findViewById(R.id.notestButton);
+        testBtn.setChecked(true);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    if(group == radioGroup) {
+                        if(checkedId == testBtn.getId()) {
+                            comMode = 0;
+                        } else if(checkedId == noTestBtn.getId()){
+                            comMode = 1;
+                        }
+                    }
+            }
+        });
 
 
         decode_btn.setOnClickListener(this);
@@ -251,8 +273,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void decode() {
         Toast.makeText(this, "录音结束", Toast.LENGTH_SHORT).show();
         receiver.record_stop();
-//        receiver.recover_test_data_packet();
-        receiver.recover_data_packet();
+        if(comMode == 0) {
+            receiver.recover_test_data_packet();
+        } else if(comMode == 1) {
+            RigidData.reset();
+            receiver.recover_data_packet();
+        }
 
         double recover_time = receiver.getRecover_time();
         decode_time_consuming.setText("解码用时：" + ((int) recover_time) + "ms");
@@ -327,10 +353,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         TextView distance_txt = findViewById(R.id.distance_txt);
-                        distance_txt.setText((int)(Math.abs(d * 100)) + "cm");
+                        distance_txt.setText((int)(Math.abs(d * 1000)) + "mm");
                     }
                 });
-                Log.e("距离", String.valueOf(Math.abs(d * 100)));
             }
         }).start();
     }
